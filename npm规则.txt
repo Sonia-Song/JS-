@@ -9,3 +9,14 @@ npm install sax@">=0.1.0<0.2.0"
 -save-dev添加到devDependencies
 
 thismyfistpackage
+
+查看源 ：npm config get registry
+
+//设置淘宝源
+npm config set registry https://registry.npm.taobao.org
+
+//设置公司的源
+npm config set registry http://127.0.0.1:4873
+
+//本次从淘宝仓库源下载
+npm --registry=https://registry.npm.taobao.org install
