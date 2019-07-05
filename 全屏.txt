@@ -1,0 +1,84 @@
+fullscreen API 接口
+属性1：fullscreenElement 该属性返回当前处于全屏模式的DOM元素。
+
+属性2：fullscreenEnabled 该属性返回当前 document 是否进入了可以请求全屏模式的状态。
+
+方法1：requestFullscreen() 请求进入全屏模式。
+
+方法2：exitFullscreen() 退出全屏模式。
+
+事件1：fullscreenchange 进入/退出全屏模式切换时会触发。
+
+事件2：fullscreenerror 进入/退出全屏模式失败时会触发。
+
+例：
+<script type="text/javascript">
+        (function (a,b) {
+            "use strict";
+            // 方法一： requestFullscreen()   请求进入全屏模式
+            // 方法二： exitFullscreen()  退出全屏模式
+            // 属性一： fullscreenElement  返回当前处于全屏模式的DOM元素
+            // 属性二： fullscreenEnabled  返回当前document是否进入了可以请求全屏模式的状态
+            // 事件一： fullscreenchange进入/退出全屏模式切换时会触发
+            // 事件而： fullscreenerror  进入/退出全屏模式失败时会触发
+
+            /* 步骤1 判断当前浏览器类型 */
+            var c=function () {
+                var api=[
+                    ["requestFullscreen", "exitFullscreen", "fullscreenchange", "fullscreen", "fullscreenElement"],
+                    ["webkitRequestFullScreen", "webkitCancelFullScreen", "webkitfullscreenchange", "webkitIsFullScreen", "webkitCurrentFullScreenElement"],
+                    ["mozRequestFullScreen", "mozCancelFullScreen", "mozfullscreenchange", "mozFullScreen", "mozFullScreenElement"]
+                ];
+                for(var c=0,i=api.length;c<i;c++){
+                    if(api[c][1] in b) return api[c];
+                }
+            }();
+            /* 如果当前浏览器不具备全屏模式 */
+            if(!c) return a.screenfull=!1;
+            /* 当前浏览器支持全屏模式 */
+            var e = {
+                init: function() {
+                    return b.addEventListener(c[2],
+                        function() {
+                            e.isFullscreen = b[c[3]],
+                            e.element = b[c[4]]
+                        }),this},
+                
+                isFullscreen: b[c[3]],
+                element: b[c[4]],
+                request: function(a) {
+                    // console.log(a);
+                    a = a || b.documentElement;
+                    b.isFullscreen || a[c[0]]();
+                    // console.dir(a);
+                },
+                exit: function() {
+                    b[c[1]]()
+                },
+                toggle: function(a) {
+                    this.isFullscreen ? this.exit() : this.request(a)
+                },
+            };
+            a.screenfull = e.init();
+        })(window,document)
+    </script>
+
+
+</head>
+<body>
+<div id="loading" style="margin:10px auto;width:600px">正在加载...</div>
+<div id="theEnd"></div>
+
+<script type="text/javascript">
+
+    function ck() {
+        console.log(screenfull)
+        screenfull && screenfull.toggle();
+    };
+    // // 在这里写你的代码...
+    var loading = document.getElementById('loading');
+    loading.style.cursor = 'pointer';
+    loading.innerHTML = '点击开始';
+    loading.onclick = ck
+
+</script>

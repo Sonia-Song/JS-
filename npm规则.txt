@@ -1,0 +1,11 @@
+dependencies  安装 --production
+
+指定版本  
+npm install sax@latest
+npm install sax@0.1.1
+npm install sax@">=0.1.0<0.2.0"
+
+-save 添加到depandencies
+-save-dev添加到devDependencies
+
+thismyfistpackage
