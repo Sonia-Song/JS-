@@ -1,0 +1,21 @@
+1.安装好小乌龟git后，用小乌龟的pull 从github上拉取项目，遇到错误：
+
+disconnected no supported authentication methods available(server sent: publickey) 
+
+或者是 git did not exit cleanly (exit code 1)
+
+亦或者是 git did not exit cleanly (exit code 128)
+
+
+
+多半是因为git和小乌龟有冲突，解决方法：
+
+右键--小乌龟---settings--network--修改ssh client为git的ssh.exe
+
+
+点击 browse按钮打开文件目录，找到git目录下的ssh.exe，确认。即可。
+
+
+
+替换成功，后，再pull一下。应该就能正常的pull成功。如果不行，再把SSH client改回小乌龟自己的程序，再试一下。
+
