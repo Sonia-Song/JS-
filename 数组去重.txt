@@ -1,0 +1,9 @@
+var arr=['apple','str','abc','apple'],c;
+
+c=arr.filter(function (element,index,self){
+
+   console.log(self.indexOf(element))
+	
+   return self.indexOf(element)===index;
+
+})
