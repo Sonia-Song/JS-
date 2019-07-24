@@ -1,0 +1,7 @@
+1、readonly --- 只读可复制，可选中，可获取焦点
+
+2、disabled --- 禁用不可复制，无法与type=hidden一起使用
+
+3、maxlength=0
+
+4、onfoucus=this.blur() --- 聚焦时去除焦点
