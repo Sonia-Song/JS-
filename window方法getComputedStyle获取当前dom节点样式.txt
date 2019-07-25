@@ -1,0 +1,4 @@
+getComputedStyle()方法是只读的
+
+用法：getComputedStyle( obj, false )[name]
+         obj.currentStyle[name]
