@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>prop&$emit</title>
+    <script src="../vue.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+    <!-- 中央事件总线 非父子-->
+    Vue.component('brother1',{
+        template: `<div>
+                    <h3>这是兄弟1</h3>
+                    <input type="text" v-model="myMessage" @input="passData(myMessage)">
+                   </div>`,
+        data(){
+            return{
+                myMessage:'兄弟1'
+            }
+        },
+        methods:{
+            passData(val) {
+                //触发全局事件
+                bus.$emit('globalEvent',val);
+            }
+        }
+    });
+    Vue.component('brother2',{
+        template: `<div>
+                    <h3>这是兄弟2</h3>
+                    <p>兄弟1传来的数据是{{brother1Message}}</p>
+                   </div>`,
+        data(){
+            return{
+                brother1Message:''
+            }
+        },
+        mounted(){
+            //绑定全局事件globalEvent
+            bus.$on('globalEvent',(val)=>{
+                this.brother1Message=val
+            })
+        }
+    });
+    var bus=new Vue();//中央事件总线
+    var app=new Vue({
+        el:'#app',
+        template:`<div>
+                    <brother1></brother1>
+                    <brother2></brother2>
+                  </div>`
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>prop&$emit</title>
+    <script src="../vue.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+    <!-- broadcast & dispatch -->
+    // 比如如下代码，一般都作为一个mixins去使用,
+    // broadcast是向特定的父组件，触发事件，
+    // dispatch是向特定的子组件触发事件，
+    // 本质上这种方式还是on和emit的封装，但在一些基础组件中却很实用。
+    //vuex公共数据的读写和抽离，解耦
+
+    function broadcast(componentName, eventName, params) {
+        this.$children.forEach(child => {
+            var name = child.$options.componentName;
+            if (name === componentName) {
+                child.$emit.apply(child, [eventName].concat(params));
+            } else {
+                broadcast.apply(child, [componentName, eventName].concat(params));
+            }
+        });
+    }
+
+    function broadcast(componentName,eventName,params) {
+        this.$children.forEach(child=>{
+            var name=child.$options.componentName;
+            if(name== componentName){
+                child.$emit.apply(child,[eventName].concat(params));
+            }else{
+                broadcast.apply(child,[componentName,eventName].concat(params));
+            }
+        })
+    }
+    export default {
+        methods: {
+            dispatch(componentName, eventName, params) {
+                var parent = this.$parent;
+                var name = parent.$options.componentName;
+                while (parent && (!name || name !== componentName)) {
+                    parent = parent.$parent;
+                    if (parent) {
+                        name = parent.$options.componentName;
+                    }
+                }
+                if (parent) {
+                    parent.$emit.apply(parent, [eventName].concat(params));
+                }
+            },
+            broadcast(componentName, eventName, params) {
+                broadcast.call(this, componentName, eventName, params);
+            }
+        }
+    };
+
+</script>
+</body>
+</html>

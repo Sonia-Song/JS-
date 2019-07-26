@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>prop&$emit</title>
+    <script src="../vue.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+    <!-- 父传子prop 子传父$emit -->
+
+    Vue.component('parent',{
+        template: `<div>
+                    <h3>这是父组件{{message}}</h3>
+                    <child :message="message" v-on:childDate="childDate" ident="[{message+'1'}]"></child>
+                    <p>这是子组件传来的值：{{fromChild}}</p>
+                   </div>`,
+        data(){
+            return{
+                message:'father',
+                fromChild:'',
+            }
+        },
+        methods: {
+            childDate(val){
+                this.fromChild=val;
+            }
+        }
+    });
+
+    Vue.component('child',{
+        template:`<div>
+                    <input type="text" v-model="myMessage" @input="sendToFather(myMessage)">
+                    <span>{{ident}}</span>
+                  </div>`,
+        props:['message','ident'],
+        data(){
+            return{
+                myMessage:this.message
+            }
+        },
+        methods:{
+            sendToFather(val){
+                this.$emit('childDate',val);
+            }
+        }
+    });
+
+    new Vue({
+        el:'#app',
+        data(){
+            return{
+
+            }
+        },
+        template:`<div><parent></parent></div>`
+    })
+</script>
+</body>
+</html>

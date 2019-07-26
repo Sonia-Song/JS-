@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>prop&$emit</title>
+    <script src="../vue.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+    <!-- $parent & $children 可以递归向上或向下访问直到根组件||最内层组件-->
+    Vue.component('child',{
+        template:`<div>
+                    <child2></child2>
+                  </div>`,
+        data(){
+            return{
+                message:'这是child组件'
+            }
+        }
+    });
+    Vue.component('child2',{
+        template:`<div>
+                    <input type="text" v-model="myMessage" @change="passData(myMessage)">
+                  </div>`,
+        data(){
+            return{
+                myMessage:'这是child2组件'
+            }
+        },
+        methods:{
+            passData(val){
+                console.log(this.$parent.$parent.message)
+            }
+        }
+    });
+
+    Vue.component('parent',{
+        template:`<div>
+                    <child></child>
+                    <input type="text" @change="passData1">
+                  </div>`,
+        data(){
+            return{
+                message:'这是父组件'
+            }
+        },
+        methods:{
+            passData1(){
+                console.log(this.$children.$children)
+            }
+        }
+    });
+
+    var app=new Vue({
+        el:'#app',
+        template:`<div>
+                    <parent></parent>
+                  </div>`
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        p{
+            width: 0;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #09f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<p>0%</p>
+<p>
+    <input type="button" value="ready!Go">
+</p>
+<script>
+    window.onload=function () {
+        var oBtn =document.querySelector('input'),
+            oBtx=document.querySelector('p'),
+            timer=null,curwidth=0,
+            getStyle=function (obj,name,value) {
+                if( obj.currentStyle ) {
+                    return obj.currentStyle[name];
+                }else {
+                    console.log(getComputedStyle( obj, false )[name])
+                    return getComputedStyle( obj, false )[name];
+                }
+            };
+    oBtn.onclick=function () {
+        cancelAnimationFrame(timer);
+        oBtx.style.width='0';
+        timer=requestAnimationFrame(function go() {
+            curwidth=parseInt(getStyle(oBtx,'width'));
+            // console.log(curwidth)
+            if(curwidth<1000){
+                oBtx.style.width=oBtx.offsetWidth+10+'px';
+                oBtx.innerHTML=parseInt(getStyle(oBtx,'width'))/10+'%';
+                timer=requestAnimationFrame(go);
+            }else{
+                cancelAnimationFrame(timer)
+            }
+        })
+    }
+    };
+</script>
+</body>
+</html>

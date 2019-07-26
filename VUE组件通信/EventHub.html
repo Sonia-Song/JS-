@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventHub</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <child></child>
+</div>
+<script>
+    Vue.component('child',{
+        template:`<h1>{{msg}}</h1>`,
+        inject:['eventHub'],
+        data:function () {
+            return{
+                msg:'2233'
+            }
+        },
+        created:function () {
+            this.eventHub.$on("update:msg",msg=>{
+                this.msg=msg;
+                console.log(this.msg)
+            })
+
+        }
+    });
+    new Vue({
+        el:'#app',
+        data() {
+            return{
+                eventHub: new Vue()
+            }
+        },
+        provide: {
+            eventHub: this.eventHub
+        },
+        methods:{
+            setRandomValue(){
+                this.eventHub.$emit("update:msg", Math.random() * 100)
+            }
+        }
+    })
+</script>
+</body>
+</html>

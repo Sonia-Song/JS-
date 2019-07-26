@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>prop&$emit</title>
+    <script src="../vue.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+    <!-- provide&inject 层级深 必须在父组件的生命周期内 -->
+    Vue.component('child',{
+        template:`<div>
+                    <h3>这是子组件</h3>
+                    <input type="text" v-model="myMessage">
+                  </div>`,
+        data(){
+            return{
+                myMessage:this.for
+            }
+        },
+        inject:['for'],
+    });
+
+    Vue.component('parent',{
+        template:`<div>
+                    <h3>这是父组件</h3>
+                    <child></child>
+                  </div>`,
+        provide:{
+            for:'测试'
+        }
+    });
+    var app=new Vue({
+        el:'#app',
+        template:`<div>
+                    <parent></parent>
+                  </div>`
+    })
+</script>
+</body>
+</html>

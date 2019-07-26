@@ -1,0 +1,29 @@
+<script>
+    // 异步执行图表
+    export const parmise = obj =>{
+        console.log('数据加载完毕,准备生成图表');
+        var p1 = new Promise(function(resolve){
+            resolve(0);
+        });
+        p1.then(fun1);
+        function continueFunc(_index){
+            var p2 = new Promise(function(resolve){
+                resolve(_index);
+            });
+            p2.then(fun1);
+        }
+        function fun1(ind){
+            obj.chart(obj.arr[ind]);
+            setTimeout(function(){
+                if(ind!=obj.arr.length-1){
+                    ind++;
+                    continueFunc(ind);
+                }
+            },500);
+        };
+        obj.chart();
+
+        obj.parevArrLen=obj.arr.length;
+
+    };
+</script>

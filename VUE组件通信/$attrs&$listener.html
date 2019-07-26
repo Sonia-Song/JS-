@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>prop&$emit</title>
+    <script src="../vue.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+    <!-- 多层级传递 -->
+
+    Vue.component('C',{
+        template:`<div>
+                    <h3>这是C组件</h3>
+                    <input type="text" v-model="$attrs.messageC" @input="passDataC($attrs.messageC)">
+                  </div>`,
+        methods:{
+            passDataC(val){
+                this.$emit('getCData',val)
+            }
+        }
+    });
+
+    Vue.component('B',{
+        template:`<div>
+                    <h3>这是B组件</h3>
+                    <input type="text" v-model="myMessage" @input="passData(myMessage)">
+                    <!--//在B组件调用C组件的时候，v-bind绑定$attrs可以直接获取B组件从A组件得来的props-->
+                    <!--//在B组件调用C组件的时候，v-on绑定$listener可以直接获取B组件从A组件绑来的方法-->
+                    <C v-bind="$attrs" v-on="$listeners"></C>
+                    <C v-bind="$arrts" v-on="$listeners"></C>
+                  </div>`,
+        props:['message'],
+        data(){
+            return{
+                myMessage: this.message
+            }
+        },
+        methods: {
+            passData(val){
+                this.$emit('getBData',val)
+            }
+        }
+    });
+
+    Vue.component('A',{
+        template: `<div>
+                       <h3>这是父组件A</h3>
+                       <B :message="message" :messageC="messageC" v-on:getCData="getCData" v-on:getBData="getBData"></B>
+                       <p>这是从B来的数据{{message}}</p>
+                       <p>这是从C来的数据{{messageC}}</p>
+                   </div>`,
+        data(){
+            return{
+                message:'你好',
+                messageC:'你好C',
+            }
+        },
+        methods:{
+            getCData(val){
+                this.messageC=val;
+            },
+            getBData(val){
+                this.message=val;
+            }
+        }
+    });
+
+   new Vue({
+       el:'#app',
+       template:`<div>
+                    <A></A>
+                 </div>`
+   })
+</script>
+</body>
+</html>
