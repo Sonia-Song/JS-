@@ -1,0 +1,5 @@
+var blob = new Blob("保存为blob形式的数据");
+
+var url = new URL.createObjectURL(blob);
+
+可以被img等标签使用,例如:image.src = url;

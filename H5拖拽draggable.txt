@@ -1,0 +1,50 @@
+H5拖放 ：
+
+一、设置元素为可拖放
+
+draggable属性设置为true
+
+
+二、ondragstart 和 setData()    当元素被拖动时，事件触发所调用的函数
+
+ 1.  ondragstart属性调用了一个函数，drag( event ),规定被拖动的数据。
+ 2. dataTransfer.setData()方法设置被拖数据的数据类型和值：
+
+	function drag(ev){
+	       ev.dataTransfer.setData("Text",ev.target.id)
+	}
+
+ 3. dataTransfer对象 ：事件对象的一个属性，用于从被拖动元素向放置目标传递字符串格式的数据，有两个方法
+	① getData() 表示可以取得由setData()保存的值
+	② setData() 第一个参数，表示保证的数据类型（“text”&“URL”）
+
+
+三、在何处放置被拖动的数据 - ondragover
+
+ * 默认无法将数据元素放置到其他元素中，需，可须知对元素的默认处理方式
+   方法 ：调用ondragover事件的 event.preventDefault()方法：
+
+四、放置 - ondrop
+
+ * ondrop属性调用了一个函数 drop(event)
+ * 当数据被放置时，会发生drop事件
+	function drop(ev){
+	   ev.preventDefault();
+	   var data=ev.dataTransfer.getData("Text");
+	   ev.target.appendChild(document.getElementById(data));
+	}
+
+
+五、拖放（Drag 和 Drop）
+
+【作用在被拖拽元素上的事件】
+ ondragstart ：表示按下鼠标键并开始移动鼠标时，进行触发（对象是被拖拽元素）
+ ondrag ：dragstart事件触发完随即触发drag事件，在元素拖动期间不停触发该事件，与mousemove事件类似。（对象是被拖拽元素）
+ ondragend ：当拖动停止时，无论是放在有效还是无效的目标上会触发dragend事件。（对象是被拖拽元素）
+
+【作用在目标元素上的事件】
+ ondragenter ：表示当前元素被拖拽到目标上就会触发，类似于mouseover事件。（对象是目标元素）
+ ondragover ：随即触发dragover事件，且被拖动元素一直在放置目标的范围内移动就一直触发。（对象是目标元素）
+ondragleave ：dragover事件不再发生，会触发dragleave事件，类似于mouseout事件，如果元素放到了放置目标中，则会触发drap事件而不是dragleave事件。（对象是目标元素）
+ondrop ：被拖拽的元素在目标元素上鼠标放开时触发事件。（对象是目标元素）
+

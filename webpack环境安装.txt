@@ -1,0 +1,5 @@
+全局安装：npm i webpack -g
+
+安装webpack依赖：npm i webpack --save-dev
+
+检查webpack版本：webpack -v

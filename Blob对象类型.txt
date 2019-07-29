@@ -1,0 +1,43 @@
+创建Blob对象（构造函数）
+var blob=new Blob(array[optional],options[optional]);
+
+第一个参数：数据序列，可以是任意格式的值，例如，任意数量的字符串Blobs以及ArrayBuffers。
+第二个参数：用于指定将要放入Blob中的数据的类型（MIME）(后端可以通过枚举MimeType，获取对应类型：
+	MimeType mimeType=MimeType.toEnum(file.getContentType());
+)
+
+例如： var blob=new Blob(["Hellow World!"],{type:"text/plain"});
+
+Blob对象的基本属性：
+1、 size：Blob对象包含的字节数（只读）
+2、 type：Blob对象包含的数据类型MIME,如果类型未知则返回空字符串；
+
+Blob对象的基本方法：
+
+Blob.slice([start,[end,[content-type]]]);
+1、起始偏移量
+2、结束偏移量
+3、可选的mime类型
+
+各浏览器兼容法：
+
+function sliceBlob(blob, start, end, type) {
+      
+type = type || blob.type;
+      
+if (blob.mozSlice) {
+          
+return blob.mozSlice(start, end, type);
+ 
+     } else if (blob.webkitSlice) {
+
+          return blob.webkitSlice(start, end type);
+
+      } else {
+
+          throw new Error("This doesn't work!");
+
+      }
+ 
+}
+--------------------- 
