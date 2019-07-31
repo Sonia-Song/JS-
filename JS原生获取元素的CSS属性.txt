@@ -1,0 +1,11 @@
+JS原生获取元素的CSS属性：
+
+getComputedStyle：获取元素计算周的样式属性值，只读。
+
+语法：var style=window.getComputedStyle("元素","伪类"); 二参可省
+
+与style区别：
+1、getComputedStyle方法是只读的，获取所有css属性，包含默认。
+
+2、ele.style 可读可写，只能是style属性中的样式
+

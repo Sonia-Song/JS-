@@ -1,0 +1,20 @@
+鼠标事件（e）
+
+一、点击  onclick
+
+二、按下  onmousedown
+
+三、松开 onmouseup
+
+四、移动 onmousemove
+
+五、经过  onmouseover
+
+六、划出  onmouseout
+
+e事件打印结果：
+
+ 1. clientX    clientY   点击位置距离当前body可视区域坐标
+ 2. pageX     pageY  对于整个页面来说，包括被卷起的body部分长度
+ 3. screenX   screenY   x    y  点击位置距离当前电脑屏幕的坐标
+ 4. offsetX    offsetY  相对于带有定位的父盒子的坐标

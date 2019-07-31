@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        body{
+            padding:0;
+            margin: 0;
+        }
+        div{
+            position:absolute;
+            left: 10px;
+            top:10px;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div>Drag Me</div>
+<script type="text/javascript">
+   // <!-- 传统实现拖拽的方法 -->
+    const div=document.querySelector('div');
+    const body=document.body;
+    div.addEventListener('mousedown',function (e) {
+        let startX=e.clientX,
+            startY=e.clientY,
+            left=div.offsetLeft,
+            top=div.offsetTop;
+
+        let callback=e=>{
+            const stepX=e.clientX-startX;
+            const stepY=e.clientY-startY;
+            div.style.left=`${left+stepX}px`;
+            div.style.top=`${top+stepY}px`;
+        };
+        document.addEventListener('mousemove',callback);
+        document.addEventListener('mouseup',()=>{
+            document.removeEventListener('mousemove',callback);
+        })
+    })
+</script>
+</body>
+</html>

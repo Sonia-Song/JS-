@@ -1,0 +1,128 @@
+H5拖放 ：
+
+一、定义被拖拽对象：draggable属性设置为true
+
+
+二、ondragstart 和 数据传递： 当元素被拖动时，事件触发所调用的函数
+
+ 1.  ondragstart属性调用了一个函数，drag( event ),规定被拖动的数据。
+ 2. dataTransfer.setData()方法设置被拖数据的数据类型和值：
+
+	function drag(ev){
+	       ev.dataTransfer.setData("Text",ev.target.id)
+	}
+
+ 3. dataTransfer对象 ：保存在dataTransfer对象中的数据只能在drop事件处理程序中读取。如果在ondrop处理程序中没有读到数据，那就是dataTransfer对象已经被销毁，数据也丢失了。
+
+	*事件对象的一个属性，用于从被拖动元素向放置目标传递字符串格式的数据*
+	两个方法:
+	① getData() 表示可以取得由setData()保存的值
+	var dt=e.dataTransfer;//读取URL var url=dataTransfer.getData("url")||
+	dataTransfer.getData("text/uri-list");//读取文本 var text=dataTransfer.getData("Text");
+
+	② setData() 第一个参数，表示保证的数据类型（“text”&“URL”）
+
+	③ clearData()：移除指定格式数据，省略参数，清除全部
+
+	④ files：返回已经投放的文件的信息数组
+		type：文件类型
+		size：文件大小
+		name：文件名
+	
+	* 属性 - 能接受什么操作*
+	① effectAllowed （绑定被拖放元素）
+	     · uninitialized：没有该被拖动元素放置行为
+	     · none：被拖动元素不能有任何行为
+	     · copy：只允许值为“copy”的dropEffect
+	     · link：只允许值为“link”的dropEffect
+	     · move：只允许值为“move”的dropEffect
+	     · copyLink：允许值为“copy”和“link”的dropEffect
+	     · copyMove：允许值为“copy”和“link”的dropEffect
+	     · linkMove：允许值为“link”和“move”的dropEffect
+	     · all：允许任意dropEffect
+
+	② dropEffect（作用于目标元素）
+	     · none：不能把拖动的元素放在这里。除文本框外所有元素默认值
+	     · move：应该把拖动的元素移动到放置目标
+	     · copy：应该把拖动的元素复制到放置目标
+	     · link：表示放置的目标会打开拖动的元素（但拖动的元素必须是一个链接，有URL）。
+
+	③items：返回DataTransferItems对象，该对象代表了拖动数据。
+
+	④setDragImage（Element img， long x，long y）：添加自定义图标
+	拖放时显示的元素图标，x，y
+	
+	⑤types：返回一个DOMStringList对象，包括了存入dataTransfer中数据的所有类型，类数组集合
+
+	⑥addElement：事件主体是被拖放元素，为拖动操作添加一个元素。
+
+
+三、在何处放置被拖动的数据 - ondragover
+
+ * 默认无法将数据元素放置到其他元素中，需，可须知对元素的默认处理方式
+   方法 ：调用ondragover事件的 event.preventDefault()方法：
+
+四、放置 - ondrop
+
+ * ondrop属性调用了一个函数 drop(event)
+ * 当数据被放置时，会发生drop事件
+	function drop(ev){
+	   ev.preventDefault();
+	   var data=ev.dataTransfer.getData("Text");
+	   ev.target.appendChild(document.getElementById(data));
+	}
+
+
+五、拖放（Drag 和 Drop）
+
+（一）源对象事件：
+
+  dragstart：源对象开始拖放，开始移动被拖拽元素时触发（主体是被拖拽元素）
+
+  drag：源对象拖放过程中，移动被拖拽元素时触发（主体是被拖拽元素）
+
+  dragend：源对象拖放结束，整个拖放操作结束时触发（主体是被拖拽元素）
+
+
+（二）过程对象事件：
+
+  dragenter：源对象开始进入过程对象范围内，被拖拽元素进入目标元素时触发（主体
+是目标元素）
+
+  dragover：源对象在过程对象范围内移动，被拖拽元素在目标元素内移动时触发（主
+体是目标元素）
+
+  dragleave：源对象离开过程对象的范围，被拖拽元素离开目标元素时触发（主体是目
+标元素）
+
+
+（三）目标对象事件：
+
+  drop：源对象被拖放到目标对象内，目标元素完全接受被拖拽元素时触发（主体是目
+标元素）
+
+【作用在被拖拽元素上的事件】
+ ondragstart ：表示按下鼠标键并开始移动鼠标时，进行触发（对象是被拖拽元素），主要用于存放需要移动的数据
+ ondrag ：dragstart事件触发完随即触发drag事件，在元素拖动期间不停触发该事件，与mousemove事件类似。（对象是被拖拽元素）
+ ondragend ：当拖动停止时，无论是放在有效还是无效的目标上会触发dragend事件。（对象是被拖拽元素）
+
+【作用在目标元素上的事件】
+ ondragenter ：表示当前元素被拖拽到目标上就会触发，类似于mouseover事件。（对象是目标元素）
+ ondragover ：随即触发dragover事件，且被拖动元素一直在放置目标的范围内移动就一直触发。（对象是目标元素）
+ondragleave ：dragover事件不再发生，会触发dragleave事件，类似于mouseout事件，如果元素放到了放置目标中，则会触发drap事件而不是dragleave事件。（对象是目标元素）
+ondrop ：被拖拽的元素在目标元素上鼠标放开时触发事件。（对象是目标元素）
+
+*** 所有元素默认都不能被释放，可以通过重写dragover/dragenter的默认行为(e.preventDefault()) ***
+*** drop重写默认行为 防止打开url ***
+*** 拖放drag中的其它一些坑：
+
+1.调用drop之前一定要先调用dragover,不管你想不想用，并且在处理函数的第一行加上：event.preventDefault();表示允许放下元素
+
+2.只能在dragstart调用函数里执行setData;在drop调用函数了执行getData;这是由操作权限所决定的 ***
+
+*** 对于Safari，还必须要在CSS中对能拖拽的元素如下设置：
+*[draggable = true] {
+    -khtml-user-drag: element;}    ***
+
+*** drag系列事件不能跟mousemove共存，只能取其一 **
+
