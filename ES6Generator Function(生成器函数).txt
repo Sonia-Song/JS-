@@ -1,0 +1,119 @@
+生成器函数
+function *(next){……}
+
+1、定义生成器函数
+function *enumerable(msg){
+	var msg1=yield msg+"after"
+	var msg2=yield msg1+"after"
+	var msg3=yield msg2+"after"
+}
+
+2、初始化迭代器
+var enumerator=enumerable('hello')
+var ret=enumerator.next()   // 控制台显示hello，ret的值{ value:'hellow after' ,done:false }
+ret=enumerator.next('world') // 控制台显示world，ret的值{value:'world after',done:false}
+ret=enumerator.next('game') // 控制台显示game，ret的值{value:'game after' ,done:false}
+ret=enumerator.throw(new Error('test')) // 控制台显示new Error('test'),然后显示game的ret的值为{ done:true }
+
+// for ...of语句     enumerator=enumerable('hello')
+for(ret of enumerator)
+console.log(JSON.stringify(ret));
+
+//控制台依次显示
+// hello
+// { value:'hello after' ,done:false }
+// world
+// { value:'world after' ,done:false }
+// { value:'game after' ,done:false }
+//game over
+// { done:true }
+
+
+** 生成器函数行为 **
+
+1、通过new运算符或函数调用的形式调用生成器函数，均返回一个生成器实例；
+2、通过new运算符或函数调用的形式调用生成器函数，均不会马上执行函数体的代码；
+3、必须调用生成器实例的next方法才会执行生成器函数体的代码；
+
+functiong *say(msg){
+    console.log(msg)
+}
+var gen=say('hello world') //没有显示hello world
+console.log(Object.prototype.toString.call(gen)) // 显示[object Generator]
+gen.next() // 显示hello world
+
+
+*** 迭代器生成器 ***
+
+1、/*关键字yield—迭代器生成器：yield后的表达式将作为迭代器next函数的返回值。*/：
+        对代码切片（switch case）
+2、迭代器next函数的入参将作为yield的返回值（有点像运算符）
+3、两个方法
+	{value:{*}, done:{Boolean}} next([*])     || true执行完所有的yield
+	{undefined} throw([*])
+	通过next函数不断执行以关键字yield分割的代码段，通过throw函数令yield分割的代码段抛出异常。
+
+五、异步调用中的应用
+
+由于迭代器模式实现 延迟执行/按需执行，因此可作为一种异步变成模式来应用
+
+eg：
+
+var iterator=getArticles('dummy.json')
+// 开始执行
+iterator.next()
+// 异步任务模型
+function getData(src){
+    setTimeout(function(){
+        iterator.next({tpl:'tpl.html', name:'fsjohnhuang'})
+},1000)
+}
+
+function getTpl(tpl){
+    setTimeout(function(){
+        iterator.next('hello ${name}')
+},3000)
+}
+
+// 同步任务
+function render(data, tpl){
+    return tpl.replace(/\$\{(\w+)\}/,function(){
+        return data[arguments[1]]==void 0 ? arguments[0] : data[arguments[1]]
+})
+}
+
+// 主逻辑
+function *getAritcles(src){
+    console.log('begin')
+    var data=yield getData(src)
+    var tpl=yield getTpl(data,tpl)
+    var res=render(data,tpl)
+    console.log(rest)
+}
+
+/   yield*  /------------------------------------------------------------------------------------------
+
+yield*是表达式，因此有返回值，语法如下：
+
+yield* [[expression]];
+
+作用：将过个yield语句根据某种规则合并为一个
+function* g3(){
+    yield* [1, 2];
+    yield* '34';
+    yield* Array.from(arguments);
+}
+var iterator=g3(5,6);
+console.log(iterator,next()); // {value:1, done:false}
+console.log(iterator,next()); // {value:2, done:false}
+console.log(iterator,next()); // {value:'3', done:false}
+console.log(iterator,next()); // {value:'4', done:false}
+console.log(iterator,next()); // {value:5, done:false}
+console.log(iterator,next()); // {value:6, done:false}
+console.log(iterator,next()); // {value:undefined, done:true}
+
+
+
+
+
+   
