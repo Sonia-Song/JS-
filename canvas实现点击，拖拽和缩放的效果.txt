@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas实现点击，拖拽和缩放的效果</title>
+    <style>
+        #canvas{
+            background-color: #dddddd;
+            /*position: absolute;*/
+            /*top:50%;*/
+            /*left: 50%;*/
+            /*transform: translate(-50%,-50%);*/
+            /*transform: translate(50%,50%);*/
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+        <script type="text/javascript">
+            (function () {
+               document.getElementById('canvas').setAttribute('width','500px');
+               document.getElementById('canvas').setAttribute('height','500px');
+               var c=document.getElementById('canvas');
+               var ctx=c.getContext("2d");
+               var ax,ay,r=30, num=1; // 绘制图形的参数
+               var timeOutEvent=0;//区分拖拽和点击的参数
+               // 创建图形
+               function createBlock(a,b,r) {
+                   ctx.beginPath();
+                   ctx.fillStyle="red";
+                   ctx.arc(a,b,r,0,Math.PI*2);
+                   ctx.fill();
+               }
+               createBlock(200,200,30);
+               //  鼠标按下事件
+               c.onmousedown=function (ev) {
+                   var e=ev||event;
+                   var x=e.clientX;
+                   var y=e.clientY;
+                   timeOutEvent = setTimeout(longPress,500);
+                   e.preventDefault();
+                   drag(x,y,r);
+               }
+               // 鼠标滚轮事件 缩放
+               c.onmousewheel=function (ev) {
+                   var e = ev||event;
+                   num += e.wheelDelta/1200;
+                   r=30*num;
+                   ctx.clearRect(0,0,c.width,c.height);
+                   if(ax==undefined&&ay==undefined){
+                       createBlock(200,200,r);
+                   }else{
+                       createBlock(ax,ay,r);
+                   }
+               };
+               // 拖拽函数
+                function drag(x,y,r) {
+                    // 判断鼠标按下事件的位置是否在路境内，isPointInPath
+                    if(ctx.isPointInPath(x,y)){
+                        // 路径正确，鼠标移动事件
+                        c.onmousemove=function (ev) {
+                            var e=ev||event;
+                            ax=e.clientX;
+                            ay=e.clientY;
+                            clearTimeout(timeOutEvent);
+                            ctx.clearRect(0,0,c.width,c.height);
+                            createBlock(ax,ay,r)
+                        };
+                        // 鼠标离开事件
+                        c.onmouseup=function (ev) {
+                            c.onmousemove=null;
+                            c.onmouseup=null;
+                            clearTimeout(timeOutEvent);
+                            if(timeOutEvent!=0){
+                                // alert("你这是点击不是拖拽")
+                            }
+                        }
+                    }
+                }
+                // 区分拖拽和点击的参数
+                function longPress(){
+                   timeOutEvent = 0;
+                }
+            })()
+            
+</script>
+
+</body>
+</html>

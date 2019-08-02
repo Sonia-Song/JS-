@@ -12,6 +12,9 @@
 
 六、划出  onmouseout
 
+七、滚轮 onmousewheel
+	e.wheelDelta和detail判断鼠标滚动方向，wheelDelta正↑，负↓，detail相反
+
 e事件打印结果：
 
  1. clientX    clientY   点击位置距离当前body可视区域坐标
