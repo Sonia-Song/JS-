@@ -1,0 +1,39 @@
+根目录：vue.config.js
+
+module.exports={
+    baseUrl:"./",  // 配置打包时的相对路径
+    devServer:{
+        port:"8081", // 代理端口
+        open:false, // 项目启动时是否自动打开浏览器，我这里设置为false，不打开，true
+        proxy:{
+            "/admin":{    //代理api
+                target:"http://localhost:8080/account/admin",  //服务器api地址
+                changeOrigin:true, // 是否跨域
+                ws:true, // proxy websockets
+                pathRewrite:{
+                    "^/admin":""
+                }
+            }
+        }
+    }
+}
+
+
+关于baseURL配置：
+1、https://www.my-app.com/my-app/   ------ baseURL可被设置为 /my-app/
+
+2、部署在任意路径下：------- baseURL可被设置为 “”（空字符串）或“./”（相对路径）
+
+* 注意 * ：
+何时应当避免使用baseUrl：
+① 当使用基于HTML5 history.pushState 的路由时；
+② 当使用pages选项构面多页面应用时
+
+这个值在开发环境下同样生效：
+
+module.exports={
+    baseUrl:process.env.NODE_ENV==='production'?"/account/admin/":"/"
+}
+
+
+https://github.com/chimurai/http-proxy-middleware#proxycontext-config
