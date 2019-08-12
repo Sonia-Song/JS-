@@ -1,0 +1,54 @@
+1、子组件定义插槽：
+
+<div>
+    <slot></slot> //子组件NavBread
+</div>
+
+2、父组件添加插槽内容：
+
+<nav-bread>
+    <span slot="bread">web秀</span>
+</nav-bread>
+
+3、最终编译代码：
+
+<div class="content">
+    <span>web秀</span>
+</div>
+
+4、多个插槽  slot用name属性标识
+
+    定义：
+    <slot name="bread"></slot>
+    <slot name="test"></slot>
+
+    引用：
+    <nav-bread>
+        <span slot="bread"></span>
+        <span slot="test"></span>
+    </nav-bread>
+
+5、作用于插槽 | 带数据的插槽
+
+写法：
+【子组件】
+<slot name="up" :data="data"></slot>
+export default{
+    data:function(){
+        return{
+            data:["张三","李四","王五","麻六"]
+        }
+    }
+}
+
+作用于插槽绑了一套数据，父组件可以拿来用，所以：样式父组件说了算，但是内容可以显示子组件绑定的。
+
+【父组件】
+
+<child>
+    <template slot-scope="user">
+        <div class="tmpl">
+            <span v-for="item in user.data">{{ item }}</span>
+        </div>
+    </template>
+</child>
