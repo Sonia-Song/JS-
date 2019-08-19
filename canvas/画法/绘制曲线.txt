@@ -1,0 +1,5 @@
+贝塞尔函数--------------绘制曲线（钢笔）
+
+1、qudraticCurveTo(cp1x,cp1y,x,y)---------------------c控制点  xy结束点
+
+2、bezierCurveTo(cp1px,cp1y,cp2x,cp2y,x,y)-----------二次贝塞尔曲线

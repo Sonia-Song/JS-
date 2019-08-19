@@ -1,0 +1,13 @@
+颜色设置：
+
+方法：
+createLinearGradient(xStart,yStart,xEnd,yEnd)------------创建线性渐变
+createRadialGradient()------------创建径向渐变
+addColorStop(offset,color)--------------------颜色和停止位置  offset----0-1
+
+属性：
+fillStyle----------------------------设置填充
+strokeStyle------------------------设置笔触
+shadowColor----------------------阴影颜色
+shadowOffsetX--------------------阴影水平
+shadowOffsetY--------------------阴影垂直

@@ -1,0 +1,50 @@
+步骤：
+
+1、beginPath()----------------------开始绘画
+
+2、moveTo(x,y)----------------------起始坐标
+
+3、lineTo()---------------------------绘制
+
+4、closePath()-----------------------闭合路径---（自动闭合开始和结束两点）
+
+5、stroke()---------------------------绘制轮廓
+
+6、fill()-------------------------------绘制填充---（自动闭合路径，可省closePath）
+
+例子：
+var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        //绘制路径
+        ctx.beginPath();
+        ctx.moveTo(100, 100);  
+      //通常会使用moveTo()函数设置起点。我们也能够使用moveTo()绘制一些不连续的路径。
+        ctx.lineTo(200,100);
+        ctx.lineTo(200,200);
+        
+        ctx.moveTo(300, 100);
+        ctx.lineTo(300, 200);
+        ctx.lineTo(400, 200);
+        ctx.closePath();// 闭合路径，会自动闭合路径开始和结束的两个点
+
+        ctx.stroke(); //绘制轮廓
+
+
+-------------------------------------------------
+
+var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        //绘制路径
+        ctx.beginPath();
+        ctx.moveTo(100, 100);  
+       //通常会使用moveTo()函数设置起点。我们也能够使用moveTo()绘制一些不连续的路径。
+        ctx.lineTo(200,100);
+        ctx.lineTo(200,200);
+        
+        ctx.moveTo(300, 100);
+        ctx.lineTo(300, 200);
+        ctx.lineTo(400, 200);
+        ctx.closePath();// 闭合路径，会自动闭合路径开始和结束的两个点
+
+        ctx.fill();   //绘制块 （会自动闭合路径）
+

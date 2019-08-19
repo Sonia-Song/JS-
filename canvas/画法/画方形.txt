@@ -1,0 +1,28 @@
+1、rect( )--参数点 创建矩形----空    stroke()---绘制
+
+2、fillRect()---绘制已填色矩形，默认黑 ，通过fillStyle修改填充色
+
+3、strokeRect()----绘制矩形（不填色），笔触默认黑
+
+4、clearRect(x,y,width,height)----清空指定矩形内像素
+
+**** 描边需要单独清除，默认外描边 ****
+
+举例：
+    var c = document.getElementById('mycanvas');
+    var ctx = c.getContext('2d');
+    ctx.rect(20,20,50,30);
+    ctx.stroke();
+    ctx.fillStyle = 'red';
+    ctx.fillRect(80,20,50,30);
+    ctx.strokeRect(20,80,50,30);
+    ctx.fillRect(80,80,80,50);
+
+
+    var c2 = document.getElementById('mycanvas2');
+    var ctx2 = c2.getContext('2d');
+    ctx2.fillStyle = 'red';
+    ctx2.fillRect(10,10,200,100);
+    //clearRect() 方法清空给定矩形内的指定像素。
+    //context.clearRect(x,y,width,height);
+    ctx2.clearRect(20,20,100,50);
