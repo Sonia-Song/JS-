@@ -1,0 +1,9 @@
+********************阴影
+
+ctx.shadowOffsetX=2;------------// 阴影x方向偏移量
+
+ctx.shadowOffsetY=2;------------// 阴影y方向偏移量
+
+ctx.shadowBlur=5;---------------// 阴影模糊度
+
+ctx.shadowColor="#fff";--------// 阴影颜色

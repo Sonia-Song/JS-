@@ -1,0 +1,68 @@
+****** 获取和操作canvas像素信息
+
+c.getImageData()--------------获得画布场景像素数据的ImageData对象
+c.putImageData(myImageData, dx, dy)---------------dx,dy表示你希望在场景内左上角绘制的像素数据所得到的的设备坐标。
+
+举例：
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0}
+        body{
+            margin: 30px;
+        }
+        canvas{
+            border: 1px solid #a4e2f9;
+        }
+    </style>
+</head>
+<body>
+    <canvas height="300" width="600" id="myCanvas"></canvas>
+    
+    <script>
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+
+        ctx.fillStyle = "#fd0";
+        ctx.fillRect(0,0,150,37.5);
+        ctx.fillStyle = "#6c0";
+        ctx.fillRect(0,37,150,37.5);
+        ctx.fillStyle = "#09f";
+        ctx.fillRect(0,75,150,37.5);
+        ctx.fillStyle = "#f30";
+        ctx.fillRect(0,112,150,37.5);
+        ctx.fillStyle = "#fff";
+        for(var i=0; i<10; i++){
+            ctx.fillStyle = "rgba(255, 255, 255,"+ (i+1)/10 +")";
+            for(var j=0; j<4; j++){
+                ctx.fillRect(5+i*14, 5+j*37.5, 14, 27.5);
+            }
+        }
+        
+        //获取canvas的图片数据
+        var imageData = ctx.getImageData(0, 0, 150, 150); //获取canvas的绘制区域的像素信息
+        var idata = imageData.data;  //真实的像素rgba信息在 data中 
+        console.log(idata)
+        /*
+         idata中的数据是一个数组，每四个分别代表一个像素点的 r g b a 值 ,如下：
+         [159,159,159,255,159,159,159,255......]
+         R - 红色 (0-255)
+         G - 绿色 (0-255)
+         B - 蓝色 (0-255)
+         A - alpha 通道 (0-255; 0 是透明的，255 是完全可见的)
+          */
+        
+        for(var i=0; i<idata.length; i+=4){
+            var avg = (idata[i]+idata[i+1]+idata[i+2])/3;
+            idata[i]     = avg; // red
+            idata[i + 1] = avg; // green
+            idata[i + 2] = avg; // blue
+        }
+        ctx.putImageData(imageData, 200, 0);
+
+    </script>
+</body>
+</html>
