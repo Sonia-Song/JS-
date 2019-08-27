@@ -7,6 +7,7 @@
     <!-- 图表区 -->
     <div class="container" id="container">
       <el-row>
+        <!-- 左 -->
         <el-col :span="6">
           <div style="background-color: blue">
             <div :style="{height:contentHeight/2-2*12+'px',marginBottom:'0.8rem'}" style="background-color: chartreuse" class="stroke">
@@ -23,6 +24,7 @@
             </div>
           </div>
         </el-col>
+        <!-- 中 -->
         <el-col :span="12">
           <div style="background-color: purple" :style="{height:contentHeight-4*12+'px'}" class="center-content ">
             <div :style="{height:contentHeight*3/4-2*12+'px'}" style="background-color: white" class="stroke">
@@ -33,19 +35,59 @@
             </div>
             <div style="background-color: coral" class="col-container">
               <el-row>
-                <el-col :span="8" style="background-color: aqua">
-                  <div :style="{height:contentHeight-(contentHeight*3/4)-3*12+'px'}"></div>
+                <el-col :span="8" style="background-color: darkred">
+                  <div :style="{height:contentHeight-(contentHeight*3/4)-3*12+'px',marginRight:'1rem'}" class="polygon">
+                    <svg style="position: absolute;top:-0.5px;left: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="15 0,10 0,0 10,0 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;bottom:-0.5px;left: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="0 0,0 5,10 15,15 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;top:-0.5px;right: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="0 0,5 0,15 10,15 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;bottom:-0.5px;right: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="15 0,15 5,5 15,0 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                  </div>
                 </el-col>
                 <el-col :span="8" style="background-color: chocolate">
-                  <div :style="{height:contentHeight-(contentHeight*3/4)-3*12+'px'}"></div>
+                  <div :style="{height:contentHeight-(contentHeight*3/4)-3*12+'px',marginRight:'1rem'}" class="polygon">
+                    <svg style="position: absolute;top:-0.5px;left: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="15 0,10 0,0 10,0 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;bottom:-0.5px;left: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="0 0,0 5,10 15,15 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;top:-0.5px;right: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="0 0,5 0,15 10,15 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;bottom:-0.5px;right: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="15 0,15 5,5 15,0 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                  </div>
                 </el-col>
-                <el-col :span="8" style="background-color: aqua">
-                  <div :style="{height:contentHeight-(contentHeight*3/4)-3*12+'px'}"></div>
+                <el-col :span="8" style="background-color: darkred">
+                  <div :style="{height:contentHeight-(contentHeight*3/4)-3*12+'px'}" class="polygon">
+                    <svg style="position: absolute;top:-0.5px;left: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="15 0,10 0,0 10,0 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;bottom:-0.5px;left: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="0 0,0 5,10 15,15 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;top:-0.5px;right: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="0 0,5 0,15 10,15 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                    <svg style="position: absolute;bottom:-0.5px;right: -1px" width="15" height="15" viewbox="0 0 100 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="15 0,15 5,5 15,0 15" style="fill:transparent;stroke:#00FFFF;stroke-width:2"/>
+                    </svg>
+                  </div>
                 </el-col>
               </el-row>
             </div>
           </div>
         </el-col>
+        <!-- 右 -->
         <el-col :span="6">
           <div style="background-color: yellow">
             <div :style="{height:contentHeight/3+2*12-0.6*12+'px',marginBottom:'0.9rem'}" style="background-color: chartreuse" class="stroke">
@@ -134,6 +176,7 @@
     padding: 2rem 1rem;
     .stroke{
       border: 1px solid #4574D6;
+      box-shadow: 0 0 1rem #4275f3 inset;
       box-sizing: border-box;
       position: relative;
       i.inner-stroke-1{
@@ -175,6 +218,21 @@
         background-color: transparent;
         border-bottom: 0.13rem solid #00FFFF;
         border-right: 0.13rem solid #00FFFF;
+      }
+    }
+    .polygon{
+      position: relative;
+      border: 1px solid #4574D6;
+      box-shadow: 0 0 1rem #4275f3 inset;
+      box-sizing: border-box;
+      border-radius: 15px;
+      .polygon-stroke{
+        position: absolute;
+        top:-0.13rem;
+        left: -0.13rem;
+        width: 2rem;
+        height: 2rem;
+        background-color: red;
       }
     }
     .col-container {
