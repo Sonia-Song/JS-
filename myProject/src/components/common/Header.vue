@@ -184,11 +184,16 @@ methods:{
   }
 },
   watch:{
-    xwidth(){
-      this.drawBgc();
+    xwidth(newVal,oldVal){
+      if(newVal){
+        this.drawBgc();
+      }
+
     },
-    xheight(){
-      this.drawBgc();
+    xheight(newVal,oldVal){
+      if(newVal){
+        this.drawBgc();
+      }
     }
   }
 }
