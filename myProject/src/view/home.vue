@@ -9,14 +9,28 @@
       <el-row>
         <el-col :span="6">
           <div style="background-color: blue">
-            <div :style="{height:contentHeight/2-2*12+'px'}" style="background-color: chartreuse"></div>
-            <div :style="{height:contentHeight/2-2*12+'px'}" style="background-color: coral"
-                 class="col-container"></div>
+            <div :style="{height:contentHeight/2-2*12+'px',marginBottom:'0.8rem'}" style="background-color: chartreuse" class="stroke">
+              <i class="inner-stroke-1"></i>
+              <i class="inner-stroke-2"></i>
+              <i class="inner-stroke-3"></i>
+              <i class="inner-stroke-4"></i>
+            </div>
+            <div :style="{height:contentHeight/2-2*12-0.8*12+'px'}" style="background-color: coral" class="col-container stroke">
+              <i class="inner-stroke-1"></i>
+              <i class="inner-stroke-2"></i>
+              <i class="inner-stroke-3"></i>
+              <i class="inner-stroke-4"></i>
+            </div>
           </div>
         </el-col>
         <el-col :span="12">
-          <div style="background-color: purple" :style="{height:contentHeight-4*12+'px'}" class="center-content">
-            <div :style="{height:contentHeight*3/4-2*12+'px'}" style="background-color: white"></div>
+          <div style="background-color: purple" :style="{height:contentHeight-4*12+'px'}" class="center-content ">
+            <div :style="{height:contentHeight*3/4-2*12+'px'}" style="background-color: white" class="stroke">
+              <i class="inner-stroke-1"></i>
+              <i class="inner-stroke-2"></i>
+              <i class="inner-stroke-3"></i>
+              <i class="inner-stroke-4"></i>
+            </div>
             <div style="background-color: coral" class="col-container">
               <el-row>
                 <el-col :span="8" style="background-color: aqua">
@@ -34,11 +48,26 @@
         </el-col>
         <el-col :span="6">
           <div style="background-color: yellow">
-            <div :style="{height:contentHeight/3+2*12+'px'}" style="background-color: chartreuse"></div>
-            <div :style="{height:contentHeight/3-3*12+'px'}" style="background-color: coral"
-                 class="col-container"></div>
-            <div :style="{height:contentHeight/3-3*12+'px'}" style="background-color: deeppink"
-                 class="col-container"></div>
+            <div :style="{height:contentHeight/3+2*12-0.6*12+'px',marginBottom:'0.9rem'}" style="background-color: chartreuse" class="stroke">
+              <i class="inner-stroke-1"></i>
+              <i class="inner-stroke-2"></i>
+              <i class="inner-stroke-3"></i>
+              <i class="inner-stroke-4"></i>
+            </div>
+            <div :style="{height:contentHeight/3-3*12-0.6*12+'px',marginBottom:'0.9rem'}" style="background-color: coral"
+                 class="col-container stroke">
+              <i class="inner-stroke-1"></i>
+              <i content="inner-stroke-2"></i>
+              <i class="inner-stroke-3"></i>
+              <i class="inner-stroke-4"></i>
+            </div>
+            <div :style="{height:contentHeight/3-3*12-0.6*12+'px'}" style="background-color: deeppink"
+                 class="col-container stroke">
+              <i class="inner-stroke-1"></i>
+              <i class="inner-stroke-2"></i>
+              <i class="inner-stroke-3"></i>
+              <i class="inner-stroke-4"></i>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -93,7 +122,7 @@
 
 <style scoped lang="scss">
   .home {
-    background-color: #1E2034;
+    background-color: #21197F;
   }
 
   .header {
@@ -103,7 +132,51 @@
   .container {
     background-color: green;
     padding: 2rem 1rem;
-
+    .stroke{
+      border: 1px solid #4574D6;
+      box-sizing: border-box;
+      position: relative;
+      i.inner-stroke-1{
+        position: absolute;
+        top:-0.13rem;
+        left: -0.13rem;
+        width: 2rem;
+        height: 2rem;
+        background-color: transparent;
+        border-top:0.13rem solid #00FFFF;
+        border-left:0.13rem solid #00FFFF;
+      }
+      .inner-stroke-2{
+        position: absolute;
+        top:-0.13rem;
+        right: -0.13rem;
+        width: 2rem;
+        height: 2rem;
+        background-color: transparent;
+        border-top: 0.13rem solid #00FFFF;
+        border-right: 0.13rem solid #00FFFF;
+      }
+      .inner-stroke-3{
+        position: absolute;
+        bottom:-0.13rem;
+        left: -0.13rem;
+        width: 2rem;
+        height: 2rem;
+        background-color: transparent;
+        border-bottom: 0.13rem solid #00FFFF;
+        border-left: 0.13rem solid #00FFFF;
+      }
+      .inner-stroke-4{
+        position: absolute;
+        bottom:-0.13rem;
+        right: -0.13rem;
+        width: 2rem;
+        height: 2rem;
+        background-color: transparent;
+        border-bottom: 0.13rem solid #00FFFF;
+        border-right: 0.13rem solid #00FFFF;
+      }
+    }
     .col-container {
       padding-top: 1rem;
       box-sizing: border-box;

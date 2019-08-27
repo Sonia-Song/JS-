@@ -1,19 +1,22 @@
 <template>
 <div class="myHeader" id="myHeader">
   <canvas id="bgc"></canvas>
-  <el-row>
-    <el-col :span="6">
-      <div style="background-color: yellow">1</div>
-    </el-col>
-    <el-col :span="12">
-      <div class="chart-title">
-        <span>大兴国际机场空运物流监控平台</span>
-      </div>
-    </el-col>
-    <el-col :span="6">
-      <div style="background-color: pink">3</div>
-    </el-col>
-  </el-row>
+  <div class="header-title">
+    <el-row>
+      <el-col :span="3">
+        <div class="return">
+          <a href="#">返回<svg t="1566809298183" class="icon" viewBox="-150 0 1324 200" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1694" width="20" height="20" fill="#00D8FF"><path d="M492.956783 64.020082 63.866075 377.917212l429.090708 313.895083L492.956783 499.977175c0 0 55.66888-0.042979 146.785088-0.042979 250.710019 0 319.671647 203.765847 319.671647 203.765847s-1.935072-447.781396-319.783187-447.781396c-66.323545 0-146.673547-0.042979-146.673547-0.042979L492.956783 64.020082z" p-id="1695"></path></svg></a>
+        </div>
+      </el-col>
+      <el-col :span="19">
+        <div class="chart-title">
+          <!--<span>大兴国际机场空运物流监控平台</span>-->
+          <span>国籍国籍国籍国籍国籍国籍国籍</span>
+        </div>
+      </el-col>
+      <el-col :span="2"></el-col>
+    </el-row>
+  </div>
 </div>
 </template>
 
@@ -23,10 +26,10 @@ name: "Header",
 props:['xwidth','xheight'],
 data(){
     return{
-
     }
 },
 mounted(){
+  this.drawBgc();
   this.$nextTick(function () {
     this.drawBgc();
   })
@@ -131,14 +134,53 @@ methods:{
     ctx.stroke();
     ctx.fill();
 
-    ctx.fillStyle='red';
-    ctx.strokeStyle='yellow';
-    ctx.lineWidth=2
+    ctx.fillStyle=radial3;
+    ctx.lineWidth=2;
     ctx.lineCap='square';
     ctx.beginPath();
-    ctx.moveTo(xw*0.24,xh*0.35);
-    ctx.lineTo(xw*0.265,xh*0.95);
-    ctx.stroke()
+    for(let i=0.005;i<0.3;i=i+0.005){
+      let x1=0.251-i;
+      let x2=0.283-i;
+      ctx.moveTo(xw*x1,xh*0.28);
+      ctx.lineTo(xw*x2,xh*0.95);
+
+    }
+    for(let j=0.005;j<0.3;j=j+0.005){
+      let x1=0.805+j;
+      let x2=0.774+j;
+      ctx.moveTo(xw*x1,xh*0.28);
+      ctx.lineTo(xw*x2,xh*0.95);
+
+    }
+    ctx.stroke();
+
+    let radial3=ctx.createLinearGradient(0,0,xw*0.805,0);
+    radial3.addColorStop(0,'rgba(33,90,255,.1)');
+    radial3.addColorStop(0.5,'rgba(0,216,255,.1)');
+    radial3.addColorStop(1,'rgba(0,216,255,.2)');
+    let radial4=ctx.createLinearGradient(xw*0.805,0,xw,0);
+    radial4.addColorStop(0,'rgba(0,216,255,.1)');
+    radial4.addColorStop(0.5,'rgba(33,90,255,.1)');
+    radial4.addColorStop(1,'rgba(33,90,255,.1)');
+    ctx.fillStyle=radial3;
+    ctx.strokeStyle='yellow';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(xw*0.251,xh*0.4);
+    ctx.lineTo(xw*0.270,xh*0.8);
+    ctx.lineTo(0,xh*0.8);
+    ctx.lineTo(0,xh*0.4);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle=radial4;
+    ctx.beginPath();
+    ctx.moveTo(xw*0.805,xh*0.4);
+    ctx.lineTo(xw*0.787,xh*0.8);
+    ctx.lineTo(xw,xh*0.8);
+    ctx.lineTo(xw,xh*0.4);
+    ctx.closePath();
+    ctx.fill();
   }
 },
   watch:{
@@ -149,7 +191,6 @@ methods:{
       this.drawBgc();
     }
   }
-
 }
 </script>
 
@@ -158,13 +199,32 @@ methods:{
     height: inherit;
     line-height: 4rem;
     span{
-      font-size: 3.2rem;
+      display: block;
+      text-align: center;
+      font-size: 3.8rem;
       font-weight: bold;
       letter-spacing: 0.3rem;
+      color:#7BE6F9;
+      background-image:-webkit-linear-gradient(bottom,#549EFF,#7BE6F9);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
   }
-  #bgc{
-    /*position: absolute;*/
+  .myHeader{
+    position: relative;
   }
-
+.header-title{
+  width: 100%;
+  position: absolute;
+  top:0;
+  .return{
+    display: block;
+    height: 3rem;
+    line-height: 6rem;
+    a{
+      color: #00D8FF;
+      font-weight: bold;
+    }
+  }
+}
 </style>
