@@ -22,7 +22,6 @@
     </div>
     <div id="radar" class="mounting-chart" style="background-color: yellow" :style="{height:vheight-8.1*12+'px'}">
       <canvas id="myCanvas" style="background-color: red"></canvas>
-      <!--<img src="../../../../../static/img/ciele_goods.png" alt="">-->
     </div>
   </div>
 </template>
@@ -104,6 +103,31 @@
       span {
         color: #FFFF00;
         font-size: 1rem;
+      }
+    }
+  }
+  #radar{
+    position: relative;
+    &:after {
+      content: ' ';
+      display: block;
+      background-image: linear-gradient(44deg, rgba(0, 252, 251, 0) 50%, #00FCFB 100%);
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      top: 14%;
+      left: 14%;
+      animation: radar-beam 4s infinite;
+      animation-timing-function: linear;
+      transform-origin: bottom right;
+      border-radius: 100% 0 0 0;
+    }
+    @keyframes radar-beam {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
       }
     }
   }
