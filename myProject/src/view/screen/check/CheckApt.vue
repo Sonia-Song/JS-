@@ -1,12 +1,10 @@
 <template>
-<div class="right-bottom">
-
-</div>
+<!-- 查验预约 -->
 </template>
 
 <script>
 export default {
-name: "RightBottom",
+name: "CheckAppointment",
 data(){
     return{
 

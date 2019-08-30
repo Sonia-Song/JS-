@@ -1,10 +1,10 @@
 <template>
-
+<!-- 提货车次 -->
 </template>
 
 <script>
 export default {
-name: "RightCenter",
+name: "CarNumber",
 data(){
     return{
 

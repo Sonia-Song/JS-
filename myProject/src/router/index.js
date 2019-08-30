@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: ()=>import('@/view/home.vue'),
+      component: ()=>import('@/view/screen/home.vue'),
     }
   ]
 })

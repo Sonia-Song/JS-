@@ -1,10 +1,10 @@
 <template>
-<div class="left-bottom"></div>
+
 </template>
 
 <script>
 export default {
-name: "LeftBottom",
+name: "Circles",
 data(){
     return{
 
