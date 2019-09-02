@@ -52,15 +52,15 @@
       myCanvas(){
         let c=document.getElementById('myCanvas');
         c.width=document.getElementById('radar').offsetWidth;
-        c.height=document.getElementById('radar').offsetHeight;
+        c.height=this.vheight-8.1*12;
         let minx;
-        c.width>c.height? minx=c.height:minx=c.width;
+        c.width>c.height? c.width=c.height:c.height=c.width;
         let ctx=c.getContext('2d');
         let img=new Image();
         img.src="../../../../../static/img/ciele_goods.png";
         img.onload=function(){
-          let x=c.width/2-minx/2;
-          ctx.drawImage(img,x,0,minx,minx);
+          ctx.clearRect(0,0,c.width,c.height);
+          ctx.drawImage(img,0,0,c.width,c.height);
         }
       }
     }
