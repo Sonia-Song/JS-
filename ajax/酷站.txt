@@ -1,0 +1,52 @@
+中企动力   http://www.300.cn/
+
+订单达人：http://www.yunjimu.com/
+
+SAP:
+CODING  ：https://coding.net/vip
+
+Teambition :https://www.teambition.com/
+
+cloud9   :https://aws.amazon.com/cn/cloud9/?origin=c9io
+
+一个压缩png的神站：https://tinypng.com/
+
+jquery图片播放插件：http://fancybox.net/
+
+免费接口：https://www.showapi.com/
+
+图标网站：https://icons8.cn/metro/
+          http://www.sfont.cn/icon
+	  https://www.easyicon.net/
+
+PPT：http://www.51miz.com/
+
+纯css样式框架：https://bulma.io/documentation/elements/button/
+
+[ABP开源项目]--vue+vuex+vue-router+EF的权限管理系统  http://vue.yoyocms.com/
+
+vue stylus
+https://www.zhangxinxu.com/jq/stylus/selectors.php
+https://blog.csdn.net/Appleyk/article/details/83582683
+
+
+vue学习：https://www.cnblogs.com/liaoanran/p/8042893.html
+
+echart：http://gallery.echartsjs.com/explore.html#sort=rank~timeframe=all~author=all
+
+地图工具：
+地图拆分：http://igeekfan.cn/123/%E5%9C%B0%E5%9B%BE%E6%8B%86%E5%88%86.html
+地图编辑：http://geojson.io/#map=8/28.239/109.308
+
+chart.js:https://github.com/chartjs/Chart.js
+
+
+
+github：
+1、https://github.com/ixrjog/opsCloud
+2、https://github.com/openspug/spug
+3、https://github.com/wuyouzhuguli/FEBS-Shiro 4、https://github.com/Heeexy/SpringBoot-Shiro-Vue 5、https://github.com/Exrick/x-boot 用户权限管理
+
+
+后台管理框架：https://github.com/herozhou/vue-framework-wz
+

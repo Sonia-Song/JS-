@@ -1,0 +1,148 @@
+ajax的原生、伪造和jquery
+
+原生ajax：XMLHTTPRequest
+
+伪造ajax：即不使用XMLHTTPRequest，利用的浏览器的一种技术实现
+
+jquery的ajax：封装XMLHTTPRequest
+
+
+原生ajax：XMLHTTPRequest的主要方法：
+
+1、open(method,url,async) 创建请求
+
+2、setRequestHeader(header,value) 设置请求头
+
+3、send(body) 发送请求（要发送的数据json）（"参数=值&参数=值"）
+
+4、getAllResponseHeaders() 获取所有响应头，返回响应头数据（string）
+
+5、getResponseHeader(header) 获取响应头指定header的值
+
+6、abort() 终止请求
+
+原生ajax：XMLHTTPRequest对象的主要属性：
+
+1、readyState  
+
+	0 - 未初始化，尚未调用open（）方法
+	1 - 启动，调用了open（方法）未调用send（）方法
+	2 - 发送，已经调用了send（）方法，未接收到响应
+	3 - 接收，已经接收到部分响应数据
+	4 - 完成，已经接收到全部响应数据
+
+2、onrdadeystatechange  当readyState的值改变时自动触发执行其对应的回调函数
+
+3、responseText  服务器返回的数据（string）
+
+4、XmlDocument responseXML 服务器返回的数据（Xml对象）
+
+5、states 状态码 200....
+
+6、statesText 状态文本（string）如：ok，notfound
+
+伪造ajax
+
+<form action="/fake_ajax/" id="f1" method="POST" target="ifr">
+    <iframe id="ifr" name="ifr" style="display: none"></iframe>
+    <input type="text" name="user">
+    <a onclick="submitForm();">提交</a>
+</form>
+
+function submitForm() {
+    document.getElementById('ifr').onload=loadIframe;
+    document.getElementById('f1').submit();
+}
+function loadIfame() {
+    var content=document.getElementById('ifr').contentWindow.document.body.innerText;
+    alert(content)
+}
+
+
+
+原生ajax上传文件
+views代码
+
+def upload(request):
+    if request.method == "GET":
+        return render(request,'upload.html')
+    else:
+        import os
+        file_obj = request.FILES.get('wenjian')
+        print(file_obj.name)
+        file_path = os.path.join('static',file_obj.name)
+        with open(file_path,'wb') as f:
+            for chun in file_obj.chunks():
+                f.write(chun)
+        return HttpResponse(file_path)
+html代码
+
+<body>
+<input type="file" id="i1">
+<a onclick="uploadajax();">上传</a>
+<div id="con"></div>
+<script>
+    function uploadajax() {
+        var formData = new FormData();//依赖formData这个对象
+        formData.append('k1','v1');//通过append来给formData添加数据
+        formData.append('wenjian',document.getElementById('i1').files[0]);//这里通过id得到的结果是一个列表，所以可以通过0位置来取第一个值
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange=function () {
+            if(xhr.readyState == 4){
+                var file_path = xhr.responseText;
+                console.log(file_path)
+                var tag = document.createElement('img');
+                tag.src = "/" + file_path;
+                document.getElementById('con').appendChild(tag);
+            }
+        };
+        xhr.open('POST','/upload/');
+        xhr.send(formData)
+    }
+</script>
+</body>
+结果：
+ajax的原生，伪造和jquery讲解
+
+       function upload2(){
+            var formData = new FormData();
+            formData.append('k1','v1');
+            // formData.append('fafafa',document.getElementById('i1').files[0]);
+            formData.append('fafafa',$('#i2')[0].files[0]);
+            // $('#i2') -> $('#i2')[0]
+            // document.getElementById('i1') -> $(document.getElementById('i1'))
+
+            $.ajax({
+                url: '/upload/',
+                type: 'POST',
+                data: formData,
+                contentType:false,
+                processData:false,
+                success:function(arg){
+                    var tag = document.createElement('img');
+                    tag.src = "/"+ arg;
+                    $('#container2').append(tag);
+                }
+            })
+        }
+#伪造的方法是下面
+
+    <h1>伪 Ajax上传文件</h1>
+    <form id="f1" method="POST" action="/upload/" target="ifr" enctype="multipart/form-data">
+        <iframe id="ifr" name="ifr" style="display: none"></iframe>
+        <input type="file" name="fafafa" />
+        <a onclick="upload3();">上传</a>
+    </form>
+    <div id="container3"></div>
+         function upload3(){
+            document.getElementById('ifr').onload = loadIframe;
+            document.getElementById('f1').submit();
+
+        }
+        function loadIframe(){
+            var content = document.getElementById('ifr').contentWindow.document.body.innerText;
+             var tag = document.createElement('img');
+            tag.src = "/"+ content;
+            $('#container3').append(tag);
+        }

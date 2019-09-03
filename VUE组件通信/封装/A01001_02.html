@@ -1,0 +1,706 @@
+<fox-sub-page id="A01001_02" v-on:menustatus="menuStatus($event)" v-bind:menu-show="m_menuShow" v-bind:menu-items="m_menuItems">
+    <fox-content-padded v-bind:readonly="m_modifyFlag">
+        <fox-group v-bind:no="'1'" v-bind:label="'基本信息'" v-bind:color="'#e60012'">
+            <fox-input-row class="non_modify">
+                <fox-text v-verify="[{require:true}]" tag="客户名称不能为空" v-bind:readonly=true v-model="CustomerName" class="my-text">客户名称</fox-text>
+                <fox-text v-verify="[{require:true}]" tag="客户编号不能为空" v-bind:readonly=true v-model="CustomerID" class="my-text">客户编号</fox-text>
+                <fox-text v-verify="[{require:true}]" tag="申请日期不能为空" v-bind:readonly=true v-model="OccurDate" class="my-text">申请日期</fox-text>
+            </fox-input-row>
+            <fox-input-row>
+                <fox-select  v-verify="[{require:true}]" tag="请选择发生类型" id="OccurType" name="OccurType" v-model="OccurType" v-bind:readonly="true" v-bind:datasoruce="m_dataSource.occurType" class="my-text">发生类型</fox-select>
+                <fox-select v-verify="[{require:true}]" tag="请选择业务品种" v-model="BusinessType" v-bind:datasoruce="m_hbusiType" class="my-text">业务品种</fox-select>
+                <fox-select v-verify="[{require:true}]" tag="请选择子产品" v-model="BusinessTypeChild" v-bind:datasoruce="m_businessTypeChild" class="my-text">子产品</fox-select>
+            </fox-input-row>
+            <fox-input-row class="non_modify">
+                <fox-text v-verify="[{require:true}]" tag="客户类型不能为空" v-bind:readonly=true v-model="CustomerType" class="my-text">客户类型</fox-text>
+            </fox-input-row>
+        </fox-group>
+        <fox-group v-if="m_standarizedtext==='show'" v-bind:no="'2'" v-bind:label="'标准化文本'" v-bind:color="'#089b2f'">
+            <fox-input-row>
+                <fox-text v-verify="[{require:true}]" v-bind:readonly="true" id="LoanUse" tag="请输入借款用途" v-model="LoanUse" v-bind:maxlength=25 class="my-text">借款用途</fox-text>
+                <fox-money v-verify="[{require:true}]" tag="申请金额数据不合法" v-model="AppliAmount" class="my-text" v-bind:rates="1" unit="元">申请金额</fox-money>
+                <fox-number v-verify="[{require:true},{max:360}]" v-bind:verify-message="['请输入申请期限','申请期限不能大于360']" v-model="Appliterm" class="my-text"  unit="月">申请期限</fox-number>
+            </fox-input-row>
+            <fox-input-row>
+                <fox-text v-verify="[{require:true},{familyPhone_required:true}]" v-bind:verify-message="['请输入住宅联系电话','住宅联系电话格式错误']" id="FamilyPhone" v-model="FamilyPhone" class="my-text">住宅联系电话</fox-text>
+                <fox-text v-verify="[{require:true}]" tag="居住地址不能为空" v-bind:readonly="true" v-model="FamilyAdd" class="my-mid-text FamilyAdd">居住地址</fox-text>
+            </fox-input-row>
+            <template v-if="m_occuSitu=='job'">
+                <fox-input-row>
+                    <fox-number v-verify="[{require:true},{phone_required:true}]" v-bind:verify-message="['请输入手机号码','手机号码格式错误']" v-bind:key="m_MobileTelephone1" v-bind:readonly="true" v-model="MobileTelephone" class="my-text MobileTelephone">手机号码</fox-number>
+                    <fox-select v-verify="[{require:true}]" tag="请选择目前职业状况" v-bind:key="m_OccupationSituation1" v-model="OccupationSituation" v-bind:datasoruce="m_dataSource.occupationSituation1" v-bind:readonly="true" class="my-text OccupationSituation">目前职业状况</fox-select>
+                    <fox-text v-verify="[{require:true}]" tag="请输入工作单位（经营企业）" v-bind:key="m_WorkCorp1" v-model="WorkCorp" v-bind:readonly="true" class="my-text WorkCorp">工作单位（经营企业）</fox-text>
+                </fox-input-row>
+                <fox-input-row>
+                    <fox-select v-verify="[{require:true}]" tag="请选择职务" v-bind:key="m_HeadShip1" v-model="HeadShip" v-bind:readonly="true" v-bind:datasoruce="m_dataSource.job" class="my-text HeadShip">职务</fox-select>
+                    <fox-text v-verify="[{require:true}]" tag="请输入单位地址" v-bind:key="m_WorkAdd1" v-bind:readonly="true" v-model="WorkAdd" class="my-mid-text WorkAdd">工作单位地址</fox-text>
+                </fox-input-row>
+                <fox-input-row>
+                    <fox-select v-verify="[{require:true}]" tag="请选择是否有公积金" v-bind:key="m_IsAccuFund1" v-model="IsAccuFund" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">是否有公积金</fox-select>
+                    <fox-select v-verify="[{require:true}]" tag="请选择是否有社保" v-bind:key="m_IsSocialSecurity1" v-model="IsSocialSecurity" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">是否有社保</fox-select>
+                    <fox-select v-verify="[{require:true}]" tag="请选择最高学历" v-bind:key="m_EduExperience1" v-model="EduExperience" v-bind:datasoruce="m_dataSource.qualifications" v-bind:readonly="true" class="my-text EduExperience">最高学历</fox-select>
+                </fox-input-row>
+                <template v-if="m_wife==='no'">
+                    <fox-input-row>
+                        <fox-select v-verify="[{require:true}]" tag="请选择婚姻状况" v-bind:readonly="true" v-bind:readonly="true" v-bind:key="m_Marriage1" v-model="Marriage" v-bind:datasoruce="m_dataSource.marriage" class="my-text marriage">婚姻状况</fox-select>
+                        <fox-text v-verify="[{require:true}]" tag="请输入紧急联系人姓名" v-bind:key="m_LinkmanName1" v-model="LinkmanName" class="my-text">紧急联系人姓名</fox-text>
+                        <fox-number v-verify="[{require:true},{phone_required:true}]" v-bind:verify-message="['请输入紧急联系人电话','紧急联系人电话格式错误']" v-bind:key="m_LinkmanPhone1" v-model="LinkmanPhone" class="my-text">紧急联系人电话</fox-number>
+                    </fox-input-row>
+                    <fox-input-row>
+                        <fox-select v-verify="[{require:true}]" tag="请选择与申请人关系" v-bind:key="m_Relationship1" v-model="Relationship" v-bind:datasoruce="m_relationShip" class="my-text ">与申请人关系</fox-select>
+                        <fox-money v-verify="[{require:true}]" tag="请输入个人月均收入" v-bind:key="m_MonthIncome1" v-model="MonthIncome" v-bind:rates="10000" v-bind:readonly="true" class="my-text MonthIncome"  unit="万元">个人月均收入</fox-money>
+                        <fox-money v-bind:key="m_HousePropertyValue1" v-model="HousePropertyValue" class="my-text" v-bind:rates="10000" unit="万元">房产价值</fox-money>
+                    </fox-input-row>
+                    <fox-input-row>
+                        <fox-money v-bind:key="m_CarValue1" v-model="CarValue" class="my-text" v-bind:rates="10000" unit="万元">汽车价值</fox-money>
+                        <fox-money v-bind:key="m_Securities1" v-model="Securities" class="my-text" v-bind:rates="10000" unit="万元">有价证券</fox-money>
+                        <fox-money v-bind:key="m_BankDeposit1" v-model="BankDeposit" class="my-text" v-bind:rates="10000" unit="万元">银行存款</fox-money>
+                    </fox-input-row>
+                    <template v-if="m_selfLoanFlag==='yes'">
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_OtherValue1" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                            <fox-select v-bind:key="m_SelfIsLoan1" v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                            <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay1" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse1" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent1" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                            <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate1" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType1" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions1" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                            <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum1" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum1" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum2" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum1" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum2" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                        </fox-input-row>
+                    </template>
+                    <template v-if="m_selfLoanFlag==='no'">
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_OtherValue2" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                            <fox-select v-bind:key="m_SelfIsLoan2" v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse2" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent2" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                            <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate2" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                            <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType2" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions2" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                            <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum2" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum3" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum4" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum3" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum4" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                        </fox-input-row>
+                    </template>
+
+                </template>
+                <template v-if="m_wife==='yes'">
+                    <fox-input-row>
+                        <fox-select v-verify="[{require:true}]" tag="请选择婚姻状况" v-bind:readonly="true" v-bind:readonly="true" v-bind:key="m_Marriage2" v-model="Marriage" v-bind:datasoruce="m_dataSource.marriage" class="my-text marriage">婚姻状况</fox-select>
+                        <fox-text v-verify="[{require:true}]" tag="请输入配偶姓名" v-bind:key="m_MateName1" v-model="MateName" v-bind:readonly="true" class="my-text MateName">配偶姓名</fox-text>
+                        <fox-text v-verify="[{certID_required:true},{require:true}]" v-bind:verify-message="['配偶身份证号码格式错误','请输入配偶身份证号码']" v-bind:key="m_MateIDNo1" v-model="MateIDNo" v-bind:readonly="true" class="my-text MateIDNo">配偶身份证号码</fox-text>
+                    </fox-input-row>
+                    <template v-if="m_mateOccuSitu==='job'">
+                        <fox-input-row>
+                            <fox-number v-verify="[{require:true},{phone_required:true}]" v-bind:verify-message="['请输入配偶手机号码','配偶手机号码格式错误']" v-bind:key="m_MatePhoneNo1" v-model="MatePhoneNo" v-bind:readonly="true" class="my-text MatePhoneNo">配偶手机号码</fox-number>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶职业状况" v-bind:key="m_MateOccupationSituation1" v-model="MateOccupationSituation" v-bind:datasoruce="m_dataSource.occupationSituation" class="my-text">配偶职业状况</fox-select>
+                            <fox-text  v-verify="[{require:true}]" tag="请输入配偶工作单位（经营企业）" v-bind:maxlength=25 v-bind:key="m_MateWorkCorp1" v-model="MateWorkCorp" class="my-text">配偶工作单位（经营企业）</fox-text>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶职务" v-bind:key="m_MateHeadShip1" v-model="MateHeadShip" v-bind:datasoruce="m_dataSource.job" class="my-text">配偶职务</fox-select>
+                            <fox-text v-verify="[{require:true}]" tag="请输入配偶单位地址" v-bind:key="m_MateWorkAdd1" v-model="MateWorkAdd" class="my-mid-text">配偶工作单位地址</fox-text>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有公积金" v-bind:key="m_MateIsAccuFund1" v-model="MateIsAccuFund" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有公积金</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有社保" v-bind:key="m_MateIsSocialSecurity1" v-model="MateIsSocialSecurity" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有社保</fox-select>
+                            <fox-money v-verify="[{require:true}]" tag="请输入个人月均收入" v-bind:key="m_MonthIncome2" v-model="MonthIncome" v-bind:readonly="true" class="my-text MonthIncome" v-bind:rates="10000" unit="万元">个人月均收入</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-verify="[{require:true}]" tag="请输入配偶月均收入" v-bind:key="m_MateMonthIncome1" v-model="MateMonthIncome" class="my-text" v-bind:rates="10000" unit="万元">配偶月均收入</fox-money>
+                            <fox-money  v-bind:key="m_HousePropertyValue2" v-model="HousePropertyValue" class="my-text" v-bind:rates="10000" unit="万元">房产价值</fox-money>
+                            <fox-money v-bind:key="m_CarValue2" v-model="CarValue" class="my-text" v-bind:rates="10000" unit="万元">汽车价值</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_Securities2" v-model="Securities" class="my-text" v-bind:rates="10000" unit="万元">有价证券</fox-money>
+                            <fox-money v-bind:key="m_BankDeposit2" v-model="BankDeposit" class="my-text" v-bind:rates="10000" unit="万元">银行存款</fox-money>
+                            <fox-money v-bind:key="m_OtherValue3" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                        </fox-input-row>
+                        <template v-if="m_selfLoanFlag==='yes'">
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan3" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay2" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan1" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay1" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse3" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent3" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate3" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType3" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions3" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum3" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum5" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum6" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum5" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum6" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan4" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay3" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan2" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse4" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent4" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate4" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType4" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions4" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum4" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum7" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum8" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum7" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum8" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                        <template v-if="m_selfLoanFlag==='no'">
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan5" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan3" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay2" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse5" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent5" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate5" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType5" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions5" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum5" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum9" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum10" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum9" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum10" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan6" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan4" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse6" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent6" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate6" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType6" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions6" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum6" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum11" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum12" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum11" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum12" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                    </template>
+                    <template v-if="m_mateOccuSitu==='other'">
+                        <fox-input-row>
+                            <fox-number v-verify="[{require:true},{phone_required:true}]" v-bind:verify-message="['请输入配偶手机号码','配偶手机号码格式错误']" v-bind:key="m_MatePhoneNo2" v-model="MatePhoneNo" v-bind:readonly="true" class="my-text MatePhoneNo">配偶手机号码</fox-number>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶职业状况" v-bind:key="m_MateOccupationSituation2" v-model="MateOccupationSituation" v-bind:datasoruce="m_dataSource.occupationSituation" class="my-text">配偶职业状况</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有公积金" v-bind:key="m_MateIsAccuFund2" v-model="MateIsAccuFund" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有公积金</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有社保" v-bind:key="m_MateIsSocialSecurity2" v-model="MateIsSocialSecurity" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有社保</fox-select>
+                            <fox-money v-verify="[{require:true}]" tag="请输入个人月均收入" v-bind:key="m_MonthIncome3" v-model="MonthIncome" v-bind:rates="10000" v-bind:readonly="true" class="my-text MonthIncome"  unit="万元">个人月均收入</fox-money>
+                            <fox-money v-verify="[{require:true}]" tag="请输入配偶月均收入" v-bind:key="m_MateMonthIncome2" v-model="MateMonthIncome" class="my-text" v-bind:rates="10000" unit="万元">配偶月均收入</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_HousePropertyValue3" v-model="HousePropertyValue" class="my-text" v-bind:rates="10000" unit="万元">房产价值</fox-money>
+                            <fox-money v-bind:key="m_CarValue3" v-model="CarValue" class="my-text" v-bind:rates="10000" unit="万元">汽车价值</fox-money>
+                            <fox-money v-bind:key="m_Securities3" v-model="Securities" class="my-text" v-bind:rates="10000" unit="万元">有价证券</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_BankDeposit3" v-model="BankDeposit" class="my-text" v-bind:rates="10000" unit="万元">银行存款</fox-money>
+                            <fox-money v-bind:key="m_OtherValue4" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                            <fox-select v-bind:key="m_SelfIsLoan7" v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                        </fox-input-row>
+                        <template v-if="m_selfLoanFlag==='yes'">
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay4" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan5" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay3" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse7" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent7" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate7" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType7" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions7" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum7" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum13" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum14" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum13" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum14" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay5" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan6" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse8" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent8" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate8" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType8" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions8" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum8" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum15" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum16" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum15" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum16" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                        <template v-if="m_selfLoanFlag==='no'">
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan7" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay4" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse9" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent9" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate9" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType9" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions9" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum9" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum17" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum18" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum17" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum18" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan8" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse10" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent10" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate10" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType10" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions10" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum10" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum19" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum20" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum19" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum20" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                    </template>
+                </template>
+            </template>
+            <template v-if="m_occuSitu=='other'">
+                <fox-input-row>
+                    <fox-number v-verify="[{require:true},{phone_required:true}]" v-bind:verify-message="['请输入手机号码','手机号码格式错误']" v-bind:key="m_MobileTelephone2" v-model="MobileTelephone" class="my-text">手机号码</fox-number>
+                    <fox-select v-verify="[{require:true}]" tag="请选择目前职业状况" v-bind:key="m_OccupationSituation2" v-model="OccupationSituation" v-bind:datasoruce="m_dataSource.occupationSituation1" v-bind:readonly="true" class="my-text OccupationSituation">目前职业状况</fox-select>
+                    <fox-select v-verify="[{require:true}]" tag="请选择是否有公积金" v-bind:key="m_IsAccuFund2" v-model="IsAccuFund" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">是否有公积金</fox-select>
+                </fox-input-row>
+                <fox-input-row>
+                    <fox-select v-verify="[{require:true}]" tag="请选择是否有社保" v-bind:key="m_IsSocialSecurity2" v-model="IsSocialSecurity" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">是否有社保</fox-select>
+                    <fox-select v-verify="[{require:true}]" tag="请选择最高学历" v-bind:key="m_EduExperience2" v-model="EduExperience" v-bind:datasoruce="m_dataSource.qualifications" v-bind:readonly="true" class="my-text EduExperience">最高学历</fox-select>
+                    <fox-select v-verify="[{require:true}]" tag="请选择婚姻状况" v-bind:readonly="true" v-bind:readonly="true" v-bind:key="m_Marriage3" v-model="Marriage" v-bind:datasoruce="m_dataSource.marriage" class="my-text marriage">婚姻状况</fox-select>
+                </fox-input-row>
+                <template v-if="m_wife==='no'">
+                    <fox-input-row>
+                        <fox-text v-verify="[{require:true}]" tag="请输入紧急联系人姓名" v-bind:key="m_LinkmanName2" v-model="LinkmanName" class="my-text">紧急联系人姓名</fox-text>
+                        <fox-text v-verify="[{require:true},{phone_required:true}]" v-bind:verify-message="['请输入紧急联系人电话','紧急联系人电话格式错误']" v-bind:key="m_LinkmanPhone2" v-model="LinkmanPhone" class="my-text">紧急联系人电话</fox-text>
+                        <fox-select v-verify="[{require:true}]" tag="请选择与申请人关系" v-bind:key="m_Relationship2" v-model="Relationship" v-bind:datasoruce="m_relationShip" class="my-text ">与申请人关系</fox-select>
+                    </fox-input-row>
+                    <fox-input-row>
+                        <fox-money v-verify="[{require:true}]" tag="请输入个人月均收入" v-bind:key="m_MonthIncome4" v-model="MonthIncome" v-bind:readonly="true" class="my-text MonthIncome" v-bind:rates="10000" unit="万元">个人月均收入</fox-money>
+                        <fox-money v-bind:key="m_HousePropertyValue4" v-model="HousePropertyValue" class="my-text" v-bind:rates="10000" unit="万元">房产价值</fox-money>
+                        <fox-money v-bind:key="m_CarValue4" v-model="CarValue" class="my-text" v-bind:rates="10000" unit="万元">汽车价值</fox-money>
+                    </fox-input-row>
+                    <fox-input-row>
+                        <fox-money v-bind:key="m_Securities4" v-model="Securities" class="my-text" v-bind:rates="10000" unit="万元">有价证券</fox-money>
+                        <fox-money v-bind:key="m_BankDeposit4" v-model="BankDeposit" class="my-text" v-bind:rates="10000" unit="万元">银行存款</fox-money>
+                        <fox-money v-bind:key="m_OtherValue5" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                    </fox-input-row>
+                    <template v-if="m_selfLoanFlag==='yes'">
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan8" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                            <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay6" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                            <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse11" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent11" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                            <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate11" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                            <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType11" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions11" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                            <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum11" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum21" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum22" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum21" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum22" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                        </fox-input-row>
+                    </template>
+                    <template v-if="m_selfLoanFlag==='no'">
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan9" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse12" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent12" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate12" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                            <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType12" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions12" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum12" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum23" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum24" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum23" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                            <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum24" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                        </fox-input-row>
+                    </template>
+                </template>
+                <template v-if="m_wife==='yes'">
+                    <fox-input-row>
+                        <fox-text v-verify="[{require:true}]" tag="请输入配偶姓名" v-bind:key="m_MateName2" v-model="MateName" v-bind:readonly="true" class="my-text MateName">配偶姓名</fox-text>
+                        <fox-text v-verify="[{certID_required:true},{require:true}]" v-bind:verify-message="['配偶身份证号码格式错误','请输入配偶身份证号码']" v-bind:key="m_MateIDNo2" v-model="MateIDNo" v-bind:readonly="true" class="my-text MateIDNo">配偶身份证号码</fox-text>
+                        <fox-number v-verify="[{require:true},{phone_required:true}]" v-bind:verify-message="['请输入配偶手机号码','配偶手机号码格式错误']" v-bind:key="m_MatePhoneNo3" v-model="MatePhoneNo" v-bind:readonly="true" class="my-text MatePhoneNo">配偶手机号码</fox-number>
+                    </fox-input-row>
+                    <template v-if="m_mateOccuSitu==='job'">
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶职业状况" v-bind:key="m_MateOccupationSituation3" v-model="MateOccupationSituation" v-bind:datasoruce="m_dataSource.occupationSituation" class="my-text">配偶职业状况</fox-select>
+                            <fox-text v-verify="[{require:true}]" tag="请输入配偶工作单位（经营企业）" v-bind:maxlength=25 v-bind:key="m_MateWorkCorp2" v-model="MateWorkCorp" class="my-text">配偶工作单位（经营企业）</fox-text>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶职务" v-bind:key="m_MateHeadShip2" v-model="MateHeadShip" v-bind:datasoruce="m_dataSource.job" class="my-text">配偶职务</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-text v-verify="[{require:true}]" tag="请输入配偶单位地址" v-bind:key="m_MateWorkAdd2" v-model="MateWorkAdd" class="my-mid-text">配偶工作单位地址</fox-text>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有公积金" v-bind:key="m_MateIsAccuFund3" v-model="MateIsAccuFund" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有公积金</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有社保" v-bind:key="m_MateIsSocialSecurity3" v-model="MateIsSocialSecurity" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有社保</fox-select>
+                            <fox-money v-verify="[{require:true}]" tag="请输入个人月均收入" v-bind:key="m_MonthIncome5" v-model="MonthIncome" v-bind:readonly="true" class="my-text MonthIncome" v-bind:rates="10000" unit="万元">个人月均收入</fox-money>
+                            <fox-money v-verify="[{require:true}]" tag="请输入配偶月均收入" v-bind:key="m_MateMonthIncome3" v-model="MateMonthIncome" class="my-text" v-bind:rates="10000" unit="万元">配偶月均收入</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_HousePropertyValue5" v-model="HousePropertyValue" class="my-text" v-bind:rates="10000" unit="万元">房产价值</fox-money>
+                            <fox-money v-bind:key="m_CarValue5" v-model="CarValue" class="my-text" v-bind:rates="10000" unit="万元">汽车价值</fox-money>
+                            <fox-money v-bind:key="m_Securities5" v-model="Securities" class="my-text" v-bind:rates="10000" unit="万元">有价证券</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_BankDeposit5" v-model="BankDeposit" class="my-text" v-bind:rates="10000" unit="万元">银行存款</fox-money>
+                            <fox-money v-bind:key="m_OtherValue6" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                            <fox-select v-bind:key="m_SelfIsLoan10" v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                        </fox-input-row>
+                        <template v-if="m_selfLoanFlag==='yes'">
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay7" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan9" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay5" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse13" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent13" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate13" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType13" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions13" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum13" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum25" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum26" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum25" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum26" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay8" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan10" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse14" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent14" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate14" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType14" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions14" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum14" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum27" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum28" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum27" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum28" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                        <template v-if="m_selfLoanFlag==='no'">
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan11" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay6" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse15" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent15" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate15" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType15" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions15" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum15" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum29" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum30" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum29" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum30" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan12" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse16" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent16" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate16" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType16" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions16" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum16" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum31" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum32" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum31" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum32" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                    </template>
+                    <template v-if="m_mateOccuSitu==='other'">
+                        <fox-input-row>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶职业状况" v-bind:key="m_MateOccupationSituation4" v-model="MateOccupationSituation" v-bind:datasoruce="m_dataSource.occupationSituation" class="my-text">配偶职业状况</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有公积金" v-bind:key="m_MateIsAccuFund4" v-model="MateIsAccuFund" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有公积金</fox-select>
+                            <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有社保" v-bind:key="m_MateIsSocialSecurity4" v-model="MateIsSocialSecurity" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">配偶是否有社保</fox-select>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-verify="[{require:true}]" tag="请输入个人月均收入" v-bind:key="m_MonthIncome6" v-model="MonthIncome" v-bind:readonly="true" class="my-text MonthIncome" v-bind:rates="10000" unit="万元">个人月均收入</fox-money>
+                            <fox-money v-verify="[{require:true}]" tag="请输入配偶月均收入" v-bind:key="m_MateMonthIncome4" v-model="MateMonthIncome" class="my-text" v-bind:rates="10000" unit="万元">配偶月均收入</fox-money>
+                            <fox-money v-bind:key="m_HousePropertyValue6" v-model="HousePropertyValue" class="my-text" v-bind:rates="10000" unit="万元">房产价值</fox-money>
+                        </fox-input-row>
+                        <fox-input-row>
+                            <fox-money v-bind:key="m_CarValue6" v-model="CarValue" class="my-text" v-bind:rates="10000" unit="万元">汽车价值</fox-money>
+                            <fox-money v-bind:key="m_Securities6" v-model="Securities" class="my-text" v-bind:rates="10000" unit="万元">有价证券</fox-money>
+                            <fox-money v-bind:key="m_BankDeposit6" v-model="BankDeposit" class="my-text" v-bind:rates="10000" unit="万元">银行存款</fox-money>
+                        </fox-input-row>
+                        <template v-if="m_selfLoanFlag==='yes'">
+                            <fox-input-row>
+                                <fox-money v-bind:key="m_OtherValue7" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                                <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan11" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                                <fox-money v-verify="[{require:true}]" tag="请输入月均偿付额" v-bind:key="m_MonthPay9" v-model="MonthPay" class="my-text" v-bind:rates="10000" unit="万元">月均偿付额</fox-money>
+                            </fox-input-row>
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan13" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay7" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse17" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent17" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate17" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType17" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions17" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum17" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum33" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum34" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum33" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum34" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan14" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse18" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent18" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate18" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType18" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions18" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum18" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum35" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum36" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum35" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum36" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                        <template v-if="m_selfLoanFlag==='no'">
+                            <fox-input-row>
+                                <fox-money v-bind:key="m_OtherValue8" v-model="OtherValue" class="my-text" v-bind:rates="10000" unit="万元">其他价值</fox-money>
+                                <fox-select v-verify="[{require:true}]" tag="请选择本人是否有贷款" v-bind:key="m_SelfIsLoan12" v-model="SelfIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">本人是否有贷款</fox-select>
+                                <fox-select v-verify="[{require:true}]" tag="请选择配偶是否有贷款" v-bind:key="m_MateIsLoan15" v-model="MateIsLoan" v-bind:datasoruce="m_dataSource.yesNo" class="my-text ">配偶是否有贷款</fox-select>
+                            </fox-input-row>
+                            <template v-if="m_mateLoanFlag==='yes'">
+                                <fox-input-row>
+                                    <fox-money v-verify="[{require:true}]" tag="请输入配偶月均偿付额" v-bind:key="m_MateMonthPay8" v-model="MateMonthPay" class="my-text" v-bind:rates="10000" unit="万元">配偶月均偿付额</fox-money>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse19" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent19" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate19" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType19" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions19" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum19" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum37" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum38" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum37" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum38" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                            <template v-if="m_mateLoanFlag==='no'">
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择购房用途" v-bind:key="m_HousingUse20" v-model="HousingUse" v-bind:datasoruce="m_dataSource.houseUse" class="my-text">购房用途</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择开发商是否反租" v-bind:key="m_IsRent20" v-model="IsRent" v-bind:datasoruce="m_dataSource.yesNo" class="my-text">开发商是否反租</fox-select>
+                                    <fox-datetime v-verify="[{require:true}]" tag="请选择收楼日期" v-bind:key="m_RepossessionDate20" v-model="RepossessionDate" v-bind:options='{"type":"date"}' class="my-text">开发商告知的收楼日期</fox-datetime>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择还款方式" v-bind:key="m_RepayType20" v-model="RepayType" v-bind:datasoruce="m_dataSource.repayType1" class="my-text">还款方式</fox-select>
+                                    <fox-select v-verify="[{require:true}]" tag="请选择居住情况" v-bind:key="m_LivingConditions20" v-model="LivingConditions" v-bind:datasoruce="m_dataSource.livingConditions" v-bind:readonly="true" class="my-text LivingConditions">居住情况</fox-select>
+                                    <fox-Number v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入现有住房数量','请输入非负整数']" v-bind:key="m_HouseNum20" v-model="HouseNum" class="my-text">现有住房数量</fox-Number>
+                                </fox-input-row>
+                                <fox-input-row>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入全部子女数量','请输入非负整数']" v-bind:key="m_AllChildrenNum39" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_AllChildrenNum40" v-model="AllChildrenNum" class="my-text">全部子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='yes'" v-verify="[{require:true},{digits:true}]" v-bind:verify-message="['请输入未成年子女数量','请输入非负整数']" v-bind:key="m_MinorChildrenNum39" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                    <fox-Number v-if="m_unmarried==='opt'" v-bind:key="m_MinorChildrenNum40" v-model="MinorChildrenNum" class="my-text">未成年子女数量</fox-Number>
+                                </fox-input-row>
+                            </template>
+                        </template>
+                    </template>
+                </template>
+            </template>
+            <template v-if="m_unmarried==='yes'||m_unmarried==='opt'">
+                <h3 class="info-title">未成年子女信息</h3>
+                <fox-input-row style="margin-bottom: 2rem;">
+                    <fox-table v-bind:header="m_tableHeader"  v-bind:content="m_tableData" v-on:cellclick="selected4($event)"  v-model="m_selectedRows"
+                               v-bind:select-policy="m_selectPolicy"  style="display:block">
+
+                        <button v-if="!m_modifyFlag" style="background-color: #d80a30" v-on:tap="addChildrenInfo"><span style="font-size: 0.8rem;" class="icon iconfont icon-xinzeng wp-button-icon" ></span>新增</button>
+                        <button v-if="!m_modifyFlag" style="background-color:#D19A5F" v-on:tap="delChildrenInfo"><span style="font-size: 0.8rem;" class="icon iconfont icon-3 wp-button-icon"></span>删除</button>
+                    </fox-table>
+                </fox-input-row>
+            </template>
+            <template v-if="m_hasHouse">
+                <h3 class="info-title">现有住房信息</h3>
+                <fox-input-row>
+                    <fox-table v-bind:header="m_tableHeader2"  v-bind:content="m_tableData2" v-on:cellclick="selected4($event)"  v-model="m_selectedRows2"
+                               v-bind:select-policy="m_selectPolicy2"  style="display:block">
+
+                        <button v-if="!m_modifyFlag" style="background-color: #d80a30" v-on:tap="addHouseInfo"> <span style="font-size: 0.8rem;" class="icon iconfont icon-xinzeng wp-button-icon" ></span>新增</button>
+                        <button v-if="!m_modifyFlag" style="background-color:#D19A5F" v-on:tap="delHouseInfo"><span style="font-size: 0.8rem;" class="icon iconfont icon-3 wp-button-icon"></span>删除</button>
+                    </fox-table>
+                </fox-input-row>
+            </template>
+        </fox-group>
+    </fox-content-padded>
+    <fox-footer slot="footer">
+        <template v-if="m_submitStyle==='red'&&!m_modifyFlag">
+            <button type="button" class="fox-btn" v-on:tap="test()" style="background-color: #d80a30">测试</button>
+            <button type="button" class="fox-btn" v-on:tap="submit()" style="background-color: #d80a30">提交</button>
+        </template>
+        <template v-if="m_submitStyle==='grey'&&!m_modifyFlag">
+            <button type="button" class="fox-btn" v-on:tap="submit()" style="background-color: #b5b5b5">提交</button>
+        </template>
+    </fox-footer>
+    <fox-dialog @close="closeDialog" title="新增未成年子女信息" id="minorChildrenInfo" class="myLayer" v-bind:options="{width:'60rem',height:'25rem'}">
+        <fox-content-padded class="A01001_02ScrollBar">
+            <fox-input-row  style="margin: 0 1rem">
+                <fox-text v-verify="[{require:true}]" tag="请输入未成年子女姓名" v-model="MinorChildrenName" class="my-text">未成年子女姓名</fox-text>
+                <fox-text v-verify="[{require:true},{certID_required:true}]" v-bind:verify-message="['请输入未成年子女身份证号码','未成年子女身份证号码格式错误']" v-model="MinorChildrenIDNo" class="my-text">未成年子女身份证号码</fox-text>
+            </fox-input-row>
+        </fox-content-padded>
+        <fox-dg-footer slot="footer" style="width: 20rem">
+            <button type="button" class="fox-btn" v-on:tap="closeDialog('children')">取消</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="fox-btn" v-on:tap="saveChildrenInfo()">保存</button>
+        </fox-dg-footer>
+    </fox-dialog>
+    <fox-dialog @close="closeDialog" title="新增现有住房信息" id="housingInfo" class="myLayer" v-bind:options="{width:'60rem',height:'25rem'}">
+        <fox-content-padded class="scrollBarHouse">
+            <fox-input-row  style="margin: 0 1rem">
+                <fox-text v-verify="[{require:true}]" tag="请输入住房地址" v-model="HouseAddr" class="my-text">住房地址</fox-text>
+            </fox-input-row>
+        </fox-content-padded>
+        <fox-dg-footer slot="footer" style="width: 20rem">
+            <button type="button" class="fox-btn" v-on:tap="closeDialog('house')">取消</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="fox-btn" v-on:tap="saveHouseInfo()">保存</button>
+        </fox-dg-footer>
+    </fox-dialog>
+</fox-sub-page>
